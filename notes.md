@@ -7,14 +7,17 @@ Handout mit:
 - Marble-Syntax (hot, cold, #, |, (, ), ^)
 - Testsyntax (expect().toBeObservable())
 - Link to RxJS-Seite mit Operatoren
-- 
+
+## Next Steps
+- Jeder bereitet die Live Demos, die er vorstellt, vor und probt sie. Dadurch erhalten wir auch eine bessere Einschätzung der benötigten Zeit.
+- Jeder überlegt sich schöne Übungen für alles (außer Piping; das gucken wir zusammen). Primär für den Teil, den man vorführt, für den anderen Teil welche mit genialen Ideen (oder so).
 
 ## Plan
 
 Aktueller Plan des Ablaufs
-15 min - Begrüßung und Warum Observables
-15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (Marco)
-10 min - Piping - live Demo
+15 min - Begrüßung und Warum Observables (Beide, Stichpunkte und Text überlegen)
+15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (Marco, nochmal proben, Stichpunkte, evtl. vorbereiten)
+10 min - Piping - live Demo (Marco)
 20
 XX min - Interaktive Session: Piping (ohne Marbles)
 10 min - Observables durch Marbles veranschaulichen (Fabian)
@@ -22,16 +25,21 @@ XX min - Interaktive Session: Piping (ohne Marbles)
 15 min - Marble Syntax und Tests - live Demo (Fabian)
 
 40
-Unabhängige Observables kombinieren: Live Demo mit Marbles und unterschieden zwischen "concat" und "merge" sowie "combineLatest" und "forkJoin". Einen Vertreter je Art in Code zeigen.
+15/25
+Unabhängige Observables kombinieren: Live Demo mit Marbles und unterschieden zwischen "concat" und "merge" sowie "combineLatest" und "forkJoin". Einen Vertreter je Art in Code zeigen. (Fabian)
 Interaktive Session: Combining mit Marbles
 
 40
-Abhängige Observables: Live Demo mit Marbles, Unterschiede (und Anwendungsfälle) zwischen switchMap, exhaustMap, concatMap, ....
+15/25
+Abhängige Observables: Live Demo mit Marbles, Unterschiede (und Anwendungsfälle) zwischen switchMap, exhaustMap, concatMap, .... (Marco)
 Beispiele im Code zeigen.
 Interaktive Session: Abhängige Observables
 
-15 min - Unsubscribing - live Demo (Was genau zeigen)
+15 min - Unsubscribing - live Demo (Marco, Was genau zeigen)
 5 min - Abschluss
+
+
+1:10 Interaktiv
 
 
 Alte Notizen
