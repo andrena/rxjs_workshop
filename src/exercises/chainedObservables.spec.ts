@@ -1,5 +1,6 @@
 import { cold, hot } from 'jest-marbles'
 import { catchError, concatMap, exhaustMap, mergeMap, of, switchMap } from 'rxjs'
+import { ka, sendPackageToAddress, sendPackageToFirstAddressOfCurrentUsersCompany } from './chainingDemoApp'
 
 describe('chained observables', () => {
     describe('flattening operators', () => {
@@ -62,6 +63,18 @@ describe('chained observables', () => {
 
             expect(chainedWithCatchOnOuter).toBeObservable(cold('-(e|)'))
             expect(chainedWithCatchOnInner).toBeObservable(cold('-e--e'))
+        })
+    })
+
+    describe('demo app', () => {
+        describe('sendPackageToFirstAddressOfCurrentUsersCompany', () => {
+            it('sends package to Karlsruhe', (done) => {
+                sendPackageToAddress.mockImplementation(() => {
+                    expect(sendPackageToAddress).toHaveBeenCalledWith(ka)
+                    done()
+                })
+                sendPackageToFirstAddressOfCurrentUsersCompany()
+            })
         })
     })
 })
