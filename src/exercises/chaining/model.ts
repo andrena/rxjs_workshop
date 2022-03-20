@@ -14,3 +14,5 @@ export type Address = {
     line1: string
     line2: string
 }
+
+export type Status = string

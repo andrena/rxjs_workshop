@@ -1,5 +1,10 @@
 import { cold, hot } from 'jest-marbles'
-import { catchError, concatMap, exhaustMap, mergeMap, of, switchMap } from 'rxjs'
+import { catchError, concatMap, exhaustMap, map, mergeMap, of, switchMap, take } from 'rxjs'
+import { andrenaKa } from './addresses'
+import { getAddresses, getCompany, getCurrentUser, getStatus, getWorkingCurrentUser } from './chainingDemoApp'
+import { andrena, otherComp } from './companies'
+import { created, verified } from './status'
+import { albert } from './users'
 
 describe('chained observables', () => {
     describe('flattening operators', () => {
@@ -66,6 +71,135 @@ describe('chained observables', () => {
     })
 
     describe('demo app', () => {
+        it('get observable with company of most current user', () => {
+            let chainedObservable
 
+            chainedObservable = getWorkingCurrentUser().pipe(
+                // ↓ Your code here
+                switchMap(user => getCompany(user.code)),
+                // ↑ Your code here
+            )
+
+            expect(chainedObservable).toBeObservable(
+                cold('----a-----a--o-------a',
+                    {a: andrena, o: otherComp}),
+            )
+        })
+
+        describe('status', () => {
+            it('get status of first user', () => {
+                let chainedObservable
+
+                chainedObservable = getWorkingCurrentUser().pipe(
+                    // ↓ Your code here
+                    take(1),
+                    switchMap(user => getStatus(user.code)),
+                    // ↑ Your code here
+                )
+
+                expect(chainedObservable).toBeObservable(
+                    cold('----c--v',
+                        {c: created, v: verified}),
+                )
+            })
+
+            it('get first status of most current user', () => {
+                let chainedObservable
+
+                chainedObservable = getWorkingCurrentUser().pipe(
+                    // ↓ Your code here
+                    switchMap(user => getStatus(user.code).pipe(
+                        take(1),
+                    )),
+                    // ↑ Your code here
+                )
+
+                expect(chainedObservable).toBeObservable(
+                    cold('----c----c----v-----c',
+                        {c: created, v: verified}),
+                )
+            })
+
+            it('get first status of first user', () => {
+                let chainedObservable
+
+                chainedObservable = getWorkingCurrentUser().pipe(
+                    // ↓ Your code here
+                    switchMap(user => getStatus(user.code)),
+                    take(1),
+                    // ↑ Your code here
+                )
+
+                expect(chainedObservable).toBeObservable(
+                    cold('----(c|)',
+                        {c: created}),
+                )
+            })
+
+            it('get status of most current user, "undefined" when no user or erroneous user ', () => {
+                let chainedObservable
+
+                chainedObservable = getCurrentUser().pipe(
+                    // ↓ Your code here
+                    switchMap(user => user
+                        ? getStatus(user.code).pipe(
+                            catchError(_ => of(undefined)))
+                        : of(undefined),
+                    ),
+                    // ↑ Your code here
+                )
+
+                expect(chainedObservable).toBeObservable(
+                    cold('0---c--v-c----v-0---c',
+                        {0: undefined, c: created, v: verified}),
+                )
+            })
+        })
+
+        describe('addresses', () => {
+            it('get full first address for first user', () => {
+                let chainedObservable
+
+                chainedObservable = getWorkingCurrentUser().pipe(
+                    // ↓ Your code here
+                    take(1),
+                    switchMap(user => getCompany(user.code).pipe(
+                        map(company => [user, company] as const))),
+                    switchMap(([user, company]) => getAddresses(company).pipe(
+                        map(address => address[0]),
+                        map(address => `${user.name}, ${address.line1}, ${address.line2}`),
+                    )),
+                    // ↑ Your code here
+                )
+
+                expect(chainedObservable).toBeObservable(
+                    cold('--------(a|)',
+                        {a: `${albert.name}, ${andrenaKa.line1}, ${andrenaKa.line2}`}),
+                )
+            })
+
+            it('update last login for company of current user', () => {
+                let chainedObservable
+
+                const updateLastLogin = jest.fn()
+
+                chainedObservable = getWorkingCurrentUser().pipe(
+                    // ↓ Your code here
+                    concatMap(user => getCompany(user.code)),
+                    // ↑ Your code here
+                )
+                chainedObservable.subscribe(
+                    company => updateLastLogin(company),
+                )
+
+                expect(chainedObservable).toSatisfyOnFlush(() => {
+                    expect(updateLastLogin.mock.calls.length).toBe(6)
+                    expect(updateLastLogin.mock.calls.filter(args => args[0] === andrena).length).toBe(4)
+                    expect(updateLastLogin.mock.calls.filter(args => args[0] === otherComp).length).toBe(2)
+                })
+            })
+        })
     })
 })
+
+// Add test where take(1) needs to be on the inner and one where it needs to be on the outer observable

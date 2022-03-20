@@ -15,6 +15,11 @@ export const charlotte: User = {
     name: 'Charlotte Chicoree'
 }
 
+export const dora: User = {
+    code: 'd_user',
+    name: 'Dora the Explorer'
+}
+
 export const eric: User = {
     code: 'e_user',
     name: 'Eric Erroruser'
