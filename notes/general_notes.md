@@ -16,7 +16,7 @@ Handout mit:
 
 Aktueller Plan des Ablaufs
 15 min - Begrüßung und Warum Observables (Beide, Stichpunkte und Text überlegen)
-15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (Marco, nochmal proben, Stichpunkte, evtl. vorbereiten)
+15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (Marco, nochmal proben, Stichpunkte, evtl. vorbereiten) (erster Probelauf: 21 min)
 10 min - Piping - live Demo (Marco)
 20
 XX min - Interaktive Session: Piping (ohne Marbles)

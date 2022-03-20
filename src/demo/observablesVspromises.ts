@@ -65,8 +65,11 @@ getCurrentUserWithPromise()
 // next-Methode direkt als Parameter übergeben.
 // Wird kein Success-Code benötigt, dann muss dennoch .subscribe() (ohne Parameter) aufgerufen werden,
 // da das Observable sonst gar nicht erst mit der internen Ausführung beginnt.
-getCurrentUserWithObservable()
+let subscription = getCurrentUserWithObservable()
     .subscribe({
         next: result => console.log(`Observable says ${result}`),
         error: error => console.error(`Observable says ${error}`),
+        complete: () => console.log('Observable completed'),
     })
+
+subscription.unsubscribe()
