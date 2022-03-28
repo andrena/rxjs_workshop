@@ -24,3 +24,13 @@ export const eric: User = {
     code: 'e_user',
     name: 'Eric Erroruser'
 }
+
+export const frida: User = {
+    code: 'f_user',
+    name: 'Frida Fridola'
+}
+
+export const gregor: User = {
+    code: 'g_user',
+    name: 'Gregor Gregorianer'
+}

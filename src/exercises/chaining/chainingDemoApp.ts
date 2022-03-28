@@ -5,7 +5,7 @@ import { cart1, cart2, cart3 } from './carts'
 import { andrena, otherComp } from './companies'
 import { Address, Cart, Company, User } from './model'
 import { created, verified } from './status'
-import { albert, berta, charlotte, dora, eric } from './users'
+import { albert, berta, charlotte, dora, eric, frida, gregor } from './users'
 
 
 export function getCurrentUser(): Observable<User> {
@@ -19,6 +19,13 @@ export function getCurrentUser(): Observable<User> {
     })
 }
 
+export function getInactiveUsers(): Observable<User> {
+    return cold('---g-----f|', {
+        f: frida,
+        g: gregor,
+    });
+}
+
 export function getWorkingCurrentUser(): Observable<User> {
     return getCurrentUser().pipe(
         filter(user => user && user.code !== eric.code),
@@ -28,13 +35,13 @@ export function getWorkingCurrentUser(): Observable<User> {
 export function getStatus(userCode: string) {
     switch (userCode) {
         case albert.code:
-            return cold('-c--v', {c: created, v: verified})
+            return cold('-c--v|', {c: created, v: verified})
         case berta.code:
-            return cold('-c', {c: created})
+            return cold('-c|', {c: created})
         case charlotte.code:
-            return cold('--v', {v: verified})
+            return cold('--v|', {v: verified})
         case dora.code:
-            return cold('-----v', {v: verified})
+            return cold('-----v|', {v: verified})
         case eric.code:
             return cold('-#', null, 'Internal Server Error')
         default:

@@ -5,3 +5,4 @@
 * Subscribe bei Hot
 * Emits at same time
 * Assign values
+* Fehlermeldungen

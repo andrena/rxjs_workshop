@@ -1,12 +1,12 @@
 import { cold, hot } from 'jest-marbles';
-import { map, merge } from 'rxjs';
+import { map, merge, tap } from 'rxjs';
 
 describe('example tests', () => {
     it('to be observable', () => {
         const values = cold('---1---2|');
 
         const multiplied = values.pipe(
-            map(value => value * 2)
+            map(value => Number(value) * 2)
         )
 
         const expected = cold('---2---4|');
@@ -15,19 +15,36 @@ describe('example tests', () => {
     });
 
     it('hot vs cold', () => {
-        const coldValues = cold('---1---2|');
+        const coldValues = cold('1--1---2|');
         const hotValues = hot('1-^1---2|');
 
         const multipliedCold = coldValues.pipe(
-            map(value => value * 2)
+            map(value => Number(value) * 2)
         );
 
         const multipliedHot = hotValues.pipe(
-            map(value => value * 2)
+            map(value => Number(value) * 2)
         );
 
-        expect(multipliedCold).toBeObservable(cold('---2---4|'));
+        expect(multipliedCold).toBeObservable(cold('2--2---4|'));
         expect(multipliedHot).toBeObservable(cold('-2---4|'));
+    });
+
+    it('flush', () => {
+        const someFunction = jest.fn();
+        const coldValues = cold('1--1---2|');
+
+        const multipliedCold = coldValues.pipe(
+            tap(value => someFunction(value))
+        );
+
+        expect(multipliedCold).toBeObservable(cold('1--1---2|'));
+
+        expect(coldValues).toSatisfyOnFlush(() => {
+            expect(someFunction).toHaveBeenNthCalledWith(1, '1');
+            expect(someFunction).toHaveBeenNthCalledWith(2, '1');
+            expect(someFunction).toHaveBeenNthCalledWith(3, '2');
+        })
     });
 
     it('Error case', () => {
@@ -48,8 +65,6 @@ describe('example tests', () => {
 
         expect(merged).toBeObservable(cold('--(ab)|'));
     });
-
-//    toHaveSubscription geht mit nested observables da käme noch ! für unsubscribe rein
 });
 
 
