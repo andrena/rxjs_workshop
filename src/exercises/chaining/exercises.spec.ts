@@ -199,7 +199,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----c--v',
+                    cold('----c--v|',
                         {c: created, v: verified}),
                 )
                 // We want an observable that emits the status of the first user. If at some time the user changes, we
