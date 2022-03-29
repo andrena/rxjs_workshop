@@ -1,6 +1,8 @@
 export type User = {
     name: string
     code: string
+    age: number
+
 }
 
 export type Cart = {
