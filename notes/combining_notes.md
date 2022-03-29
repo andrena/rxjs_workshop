@@ -18,3 +18,5 @@ z.b cart entry ob der cart geschlossen wurde mit addressModifications wenn beide
 ## concat 
 Zahlung und anschließende Nutzung
 
+## withLatestFrom
+

@@ -3,3 +3,19 @@
 - pairwise zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2")
 - startWith()
 - catchError()
+- map()
+- filter
+- skip
+- debounceTime
+- reduce
+- max
+- delay
+- tap
+- of
+- from
+- empty
+- interval
+- timer
+- distinct
+- distinctUntilChanged
+- bufferCount
