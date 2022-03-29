@@ -1,3 +1,5 @@
 - first() vs take(1)
 - takeUntil()
-- buffer zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2")
+- pairwise zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2")
+- startWith()
+- catchError()
