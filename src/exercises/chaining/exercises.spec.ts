@@ -477,5 +477,3 @@ describe('chained observables', () => {
         })
     })
 })
-
-// Add test where take(1) needs to be on the inner and one where it needs to be on the outer observable
