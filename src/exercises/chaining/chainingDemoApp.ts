@@ -7,6 +7,22 @@ import { Address, Cart, Company, User } from './model'
 import { created, verified } from './status'
 import { albert, berta, charlotte, dora, eric, frida, gregor } from './users'
 
+export function getActiveLanguage() {
+    return hot('e---d----ed----f-e')
+}
+
+export const getHelloInLanguage = (lang: string): string => {
+    switch (lang) {
+        case 'e':
+            return 'Hello'
+        case 'd':
+            return 'Hallo'
+        case 'f':
+            return 'Bonjour'
+        default:
+            return 'Hi'
+    }
+}
 
 export function getCurrentUser(): Observable<User> {
     return hot('0--a----b--dc--e--ab', {
@@ -23,7 +39,7 @@ export function getInactiveUsers(): Observable<User> {
     return cold('---g-----f|', {
         f: frida,
         g: gregor,
-    });
+    })
 }
 
 export function getWorkingCurrentUser(): Observable<User> {
