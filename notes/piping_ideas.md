@@ -1,21 +1,21 @@
-- first() vs take(1)
-- takeUntil()
-- pairwise zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2")
-- startWith()
-- catchError()
-- map()
-- filter
-- skip
-- debounceTime
-- reduce
-- max
-- delay
-- tap
 - of
 - from
-- empty
-- interval
-- timer
-- distinct
-- distinctUntilChanged
-- bufferCount
+- first() vs take(1) F
+- takeUntil() F
+- catchError() F
+- map() F
+- filter F 
+- skip F
+- distinctUntilChanged F
+- tap F
+- distinct F
+- debounceTime
+- reduce M
+- pairwise zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2") M
+- startWith()
+- scan M
+- max M
+- delay M 
+- bufferCount M
+- (interval)
+- (timer)
