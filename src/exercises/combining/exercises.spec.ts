@@ -1,5 +1,5 @@
 import { cold, hot } from 'jest-marbles'
-import { combineLatest, concat, distinct, filter, forkJoin, map, merge, partition, tap } from 'rxjs'
+import { combineLatest, concat, distinct, filter, forkJoin, map, merge, partition, race, tap } from 'rxjs'
 import {
     getActiveCart,
     getActiveLanguage,
@@ -16,11 +16,28 @@ import { chicken, minerals, turkey, veggies } from './foods'
 
 describe('combining', () => {
 
+
+    it('race', () => {
+        // WIP
+        const ping = (serverId: number) => serverId === 1 ? cold('-(a|)') : cold('----(1|)')
+        const addDiscounts = (serverId: number) => serverId === 1 ? cold('----(b|)') : cold('---(2|)')
+        const addVat = (serverId: number) => serverId === 1 ? cold('-(c|)') : cold('--(3|)')
+        const calcPrices = (serverId: number) => serverId === 1 ? cold('--(d|)') : cold('---(4|)')
+
+        const server1Workflow = concat(ping(1), addDiscounts(1), addVat(1), calcPrices(1))
+        const server2Workflow = concat(ping(2), addDiscounts(2), addVat(2), calcPrices(2))
+
+        let finalWorkflow = race([server1Workflow, server2Workflow])
+
+        expect(finalWorkflow).toBeObservable(cold('-a---bc-(d|)'))
+    })
     // '--f--c----lw|'
     // '-t---m---v--c|'
     it('merging dogs with food', () => {
 
         const combined$ = merge(getAllDogs(), getMealSources())
+
+
 
         expect(combined$).toBeObservable(cold('-tf--(cm)vlwh|', {
             t: turkey,
