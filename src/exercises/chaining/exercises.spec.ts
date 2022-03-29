@@ -17,7 +17,7 @@ import { getAddresses, getCompany, getCurrentUser, getStatus, getWorkingCurrentU
 import { andrena, otherComp } from './companies'
 import { Address, Company, Status, User } from './model'
 import { created, verified } from './status'
-import { albert, berta, charlotte, dora, eric } from './users'
+import { albert, berta, charlotte, dora, eric, herta } from './users'
 
 const timer = jest.fn((sleep: number) => cold('----0', {0: 0}))
 
@@ -98,7 +98,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----a-----a--o-------a',
+                    cold('----a-----a--o-------a--o',
                         {a: andrena, o: otherComp}),
                 )
                 // We want an observable that always emits the company as soon as it is loaded of the most recent user.
@@ -119,7 +119,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----a-----a--o--0----a',
+                    cold('----a-----a--o--0----a--o',
                         {a: andrena, o: otherComp, 0: undefined}),
                 )
                 // The same observable as above. However, now we need to deal with the error case because for some users
@@ -139,7 +139,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('0---a-----a--o-------a',
+                    cold('0---a-----a--o-------a--o',
                         {a: andrena, o: otherComp, 0: null}),
                 )
                 // The same observable as above. However, now we ignore the error case so first filter out eric.
@@ -158,7 +158,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('0---a-----a--o--u----a',
+                    cold('0---a-----a--o--u----a--o',
                         {a: andrena, o: otherComp, 0: null, u: undefined}),
                 )
                 // Once again the same observable as above. Now we combine both previous cases, so for the "null" user the
@@ -176,11 +176,12 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----a-----b--c-------b',
+                    cold('----a-----b--c-------b--h',
                         {
                             a: `${albert.name} at ${andrena}`,
                             b: `${berta.name} at ${andrena}`,
                             c: `${charlotte.name} at ${otherComp}`,
+                            h: `${herta.name} at ${otherComp}`
                         }),
                 )
                 // Create an observable that emits the string "USERNAME at COMPANY" for the current user
@@ -199,7 +200,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----c--v',
+                    cold('----c--v|',
                         {c: created, v: verified}),
                 )
                 // We want an observable that emits the status of the first user. If at some time the user changes, we
@@ -218,7 +219,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('----c----c----v-----c',
+                    cold('----c----c----v-----c---c',
                         {c: created, v: verified}),
                 )
                 // We want an observable that emits the first status of the most current user. If the user changes, then
@@ -258,7 +259,7 @@ describe('chained observables', () => {
                 )
 
                 expect(chainedObservable$).toBeObservable(
-                    cold('0---c--v-c----v-0---c',
+                    cold('0---c--v-c----v-0---c---c',
                         {0: undefined, c: created, v: verified}),
                 )
                 // We want an observable that emits the status (and status changes) of the most current user. If the

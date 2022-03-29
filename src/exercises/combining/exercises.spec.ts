@@ -9,7 +9,7 @@ import {
     getStatus,
 } from '../chaining/chainingDemoApp'
 import { created, verified } from '../chaining/status'
-import { albert, berta, charlotte, dora, eric, frida, gregor } from '../chaining/users'
+import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../chaining/users'
 import { getAllDogs, getMealSources } from './combiningDemoApp'
 import { calli, fay, lucky, wastl } from './dogs'
 import { chicken, minerals, turkey, veggies } from './foods'
@@ -87,8 +87,8 @@ describe('demo app', () => {
             )
             // ↑ Your code here
 
-            expect(usersWithDiscount$).toBeObservable(cold('0--(ag)-bf-dc', {
-                a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, 0: null,
+            expect(usersWithDiscount$).toBeObservable(cold('0--(ag)-bf-dc----------h', {
+                a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, h: herta, 0: null,
             }))
 
             //Extra assert that the function was called in the correct order
@@ -124,8 +124,8 @@ describe('demo app', () => {
             const [users, errorCases] = partition(getCurrentUser(), (user => user ? user.code !== eric.code : false))
             // ↑ Your code here
 
-            expect(users).toBeObservable(cold('---a----b--dc-----ab',
-                {a: albert, b: berta, c: charlotte, d: dora}))
+            expect(users).toBeObservable(cold('---a----b--dc-----ab---h',
+                {a: albert, b: berta, c: charlotte, d: dora, h: herta}))
             expect(errorCases).toBeObservable(cold('0--------------e----',
                 {e: eric, 0: null}))
 
@@ -158,8 +158,8 @@ describe('demo app', () => {
 
             const combined$ = concat(getCurrentUser(), getActiveCart())
 
-            expect(combined$).toBeObservable(hot('0--a----b--dc--e--ab',
-                {a: albert, b: berta, c: charlotte, d: dora, e: eric, 0: null}))
+            expect(combined$).toBeObservable(hot('0--a----b--dc--e--ab---h',
+                {a: albert, b: berta, c: charlotte, d: dora, e: eric, h: herta, 0: null}))
         })
 
     })

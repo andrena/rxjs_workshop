@@ -5,7 +5,7 @@ import { cart1, cart2, cart3 } from './carts'
 import { andrena, otherComp } from './companies'
 import { Address, Cart, Company, User } from './model'
 import { created, verified } from './status'
-import { albert, berta, charlotte, dora, eric, frida, gregor } from './users'
+import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './users'
 
 export function getActiveLanguage() {
     return hot('e---d----ed----f-e')
@@ -25,13 +25,14 @@ export const getHelloInLanguage = (lang: string): string => {
 }
 
 export function getCurrentUser(): Observable<User> {
-    return hot('0--a----b--dc--e--ab', {
+    return hot('0--a----b--dc--e--ab---h', {
         0: null,
         a: albert,
         b: berta,
         c: charlotte,
         d: dora,
         e: eric,
+        h: herta,
     })
 }
 
@@ -60,6 +61,8 @@ export function getStatus(userCode: string) {
             return cold('-----v|', {v: verified})
         case eric.code:
             return cold('-#', null, 'Internal Server Error')
+        case herta.code:
+            return cold('-c|', {c: created})
         default:
             return cold('-#', null, 'Invalid user code')
     }
@@ -86,6 +89,8 @@ export function getCompany(userCode: string): Observable<Company> {
             return cold('------(o|)', {o: otherComp})
         case eric.code:
             return cold('-#', null, 'Internal Server Error')
+        case herta.code:
+            return cold('-(o|)', {o: otherComp})
         default:
             return cold('-#', null, 'Invalid user code')
     }

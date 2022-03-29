@@ -41,3 +41,10 @@ export const gregor: User = {
     name: 'Gregor Gregorianer',
     age: 40
 }
+
+
+export const herta: User = {
+    code: 'h_user',
+    name: 'Herta Hertenstein',
+    age: 55
+}
