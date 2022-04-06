@@ -110,7 +110,7 @@ describe('operators', () => {
     //         {e: english, g: german, f: french}));
     // });
 
-    it('filter', () => {
+    it('return code of adolescent valid users', () => {
 
         const observable$ = getCurrentUser().pipe(
             filter(user => user?.age >= 18 && (!user?.name.includes('hörnchen'))),
