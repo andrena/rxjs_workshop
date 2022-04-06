@@ -8,7 +8,7 @@ export const albert: User = {
 
 export const berta: User = {
     code: 'b_user',
-    name: 'Berta Bhörchnen',
+    name: 'Berta Bhörnchen',
     age: 30
 }
 

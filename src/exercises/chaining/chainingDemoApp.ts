@@ -3,21 +3,24 @@ import { filter, Observable } from 'rxjs'
 import { andrenaKa, andrenaMuc, otherAddress } from './addresses'
 import { cart1, cart2, cart3 } from './carts'
 import { andrena, otherComp } from './companies'
-import { Address, Cart, Company, User } from './model'
+import { Address, Cart, Company, Language, User } from './model'
 import { created, verified } from './status'
 import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './users'
+import { english, french, german } from './languages';
 
 export function getActiveLanguage() {
-    return hot('e---d----ed----f-e')
+    return hot('--e--eg--g-eg----f-e', {
+        e: english, g: german, f: french
+    })
 }
 
-export const getHelloInLanguage = (lang: string): string => {
+export const getHelloInLanguage = (lang: Language): string => {
     switch (lang) {
-        case 'e':
+        case english:
             return 'Hello'
-        case 'd':
+        case german:
             return 'Hallo'
-        case 'f':
+        case french:
             return 'Bonjour'
         default:
             return 'Hi'

@@ -17,4 +17,6 @@ export type Address = {
     line2: string
 }
 
+export type Language = string
+
 export type Status = string

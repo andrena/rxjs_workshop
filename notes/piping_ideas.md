@@ -1,5 +1,6 @@
 - of
 - from
+- startWith()
 - first() vs take(1) F
 - takeUntil() F
 - catchError() F
@@ -12,7 +13,6 @@
 - debounceTime
 - reduce M
 - pairwise zusammen mit startWith (e.g. currentUser(), bei Userchange log "Changed from user1 to user2") M
-- startWith()
 - scan M
 - max M
 - delay M 
