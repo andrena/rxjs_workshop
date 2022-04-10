@@ -15,7 +15,7 @@ export const berta: User = {
 export const charlotte: User = {
     code: 'c_user',
     name: 'Charlotte Chicoree',
-    age: 42
+    age: 44
 }
 
 export const dora: User = {
@@ -33,7 +33,7 @@ export const eric: User = {
 export const frida: User = {
     code: 'f_user',
     name: 'Frida Fridola',
-    age: 13
+    age: 14
 }
 
 export const gregor: User = {
@@ -46,5 +46,5 @@ export const gregor: User = {
 export const herta: User = {
     code: 'h_user',
     name: 'Herta Hertenstein',
-    age: 55
+    age: 54
 }
