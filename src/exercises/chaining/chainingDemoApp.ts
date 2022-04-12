@@ -9,7 +9,7 @@ import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './us
 import { english, french, german } from './languages';
 
 export function getActiveLanguage() {
-    return hot('--e--eg--g-eg----f-e', {
+    return hot('--e--eg--g---eg--f-e', {
         e: english, g: german, f: french
     })
 }
@@ -38,6 +38,11 @@ export function getCurrentUser(): Observable<User> {
         h: herta,
     })
 }
+
+export function getCurrentUsersWithError(): Observable<User> {
+    return hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor});
+}
+
 
 export function getInactiveUsers(): Observable<User> {
     return cold('---g-----f|', {

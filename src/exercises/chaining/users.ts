@@ -48,3 +48,9 @@ export const herta: User = {
     name: 'Herta Hertenstein',
     age: 54
 }
+
+export const gast: User = {
+    code: 'gast',
+    name: 'Gastuser',
+    age: NaN
+}

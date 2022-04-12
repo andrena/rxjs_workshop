@@ -1,6 +1,7 @@
 import { cold, hot } from 'jest-marbles'
 import {
     bufferCount,
+    catchError,
     distinctUntilChanged,
     filter,
     first,
@@ -19,10 +20,10 @@ import {
     tap,
 } from 'rxjs'
 import { cart1, cart2 } from '../chaining/carts'
-import { getActiveCart, getActiveLanguage, getCurrentUser, getHelloInLanguage } from '../chaining/chainingDemoApp'
+import { getActiveCart, getActiveLanguage, getCurrentUser, getCurrentUsersWithError, getHelloInLanguage } from '../chaining/chainingDemoApp'
 import { english, french, german } from '../chaining/languages'
 import { User } from '../chaining/model'
-import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../chaining/users'
+import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../chaining/users'
 import { debounceTime, delay, interval, timer } from '../testHelper'
 
 describe('creation', () => {
@@ -32,7 +33,7 @@ describe('creation', () => {
     it('create an observable with single emit', () => {
 
         // ↓ Your code here
-        const observable$ = of(numbers)
+        let observable$ = of(numbers)
         // ↑ Your code here
 
         expect(observable$).toBeObservable(cold('(a|)', {
@@ -45,7 +46,7 @@ describe('creation', () => {
     it('create an observable with multiple emits', () => {
 
         // ↓ Your code here
-        const observable$ = from(numbers)
+        let observable$ = from(numbers)
         // ↑ Your code here
 
         expect(observable$).toBeObservable(cold('(abcdef|)', {
@@ -61,12 +62,12 @@ describe('operators', () => {
     it('the websites standard should be german at the start', () => {
 
         // ↓ Your code here
-        const observable$ = getActiveLanguage().pipe(
+        let observable$ = getActiveLanguage().pipe(
             startWith(german),
         )
         // ↑ Your code here
 
-        expect(observable$).toBeObservable(hot('g-e--eg--g-eg----f-e',
+        expect(observable$).toBeObservable(hot('g-e--eg--g---eg--f-e',
             {e: english, g: german, f: french},
         ))
 
@@ -77,7 +78,7 @@ describe('operators', () => {
     it('first value', () => {
 
         // ↓ Your code here
-        const observable$ = getCurrentUser().pipe(
+        let observable$ = getCurrentUser().pipe(
             take(1),
         )
         // ↑ Your code here
@@ -92,7 +93,7 @@ describe('operators', () => {
     it('retrieve first non-null value', () => {
 
         // ↓ Your code here
-        const observable$ = getCurrentUser().pipe(
+        let observable$ = getCurrentUser().pipe(
             first(user => !!user),
         )
         // ↑ Your code here
@@ -104,10 +105,10 @@ describe('operators', () => {
         // Only retrieve the first non-null value from the observable. Try to do this with one operator.
     })
 
-    it('skip null', () => {
+    it('skip first value', () => {
 
         // ↓ Your code here
-        const observable$ = getCurrentUser().pipe(
+        let observable$ = getCurrentUser().pipe(
             skip(1),
         )
         // ↑ Your code here
@@ -118,21 +119,9 @@ describe('operators', () => {
         // Skip the first value.
     })
 
-    // it('distinct', () => {
-    //
-    //     // ↓ Your code here
-    //     const observable$ = getActiveLanguage().pipe(
-    //         distinct()
-    //     );
-    //     // ↑ Your code here
-    //
-    //     expect(observable$).toBeObservable(hot('--e---g----------f--',
-    //         {e: english, g: german, f: french}));
-    // });
-
     it('return code of adolescent valid users', () => {
 
-        const observable$ = getCurrentUser().pipe(
+        let observable$ = getCurrentUser().pipe(
             filter(user => user?.age >= 18 && (!user?.name.includes('hörnchen'))),
             map(user => user.code),
         )
@@ -147,11 +136,11 @@ describe('operators', () => {
 
     it('only take until the discount time observable emits', () => {
 
-        const discountEnd$ = cold('--------(a|)')
-        const applyDiscount = jest.fn()
+        let discountEnd$ = cold('--------(a|)')
+        let applyDiscount = jest.fn()
 
         // ↓ Your code here
-        const observable$ = getActiveCart().pipe(
+        let observable$ = getActiveCart().pipe(
             takeUntil(discountEnd$),
             filter(cart => !!cart),
             tap(cart => applyDiscount(cart)),
@@ -169,13 +158,13 @@ describe('operators', () => {
     it('return hello message on language change', () => {
 
         // ↓ Your code here
-        const observable$ = getActiveLanguage().pipe(
+        let observable$ = getActiveLanguage().pipe(
             distinctUntilChanged(),
             map(lang => getHelloInLanguage(lang)),
         )
         // ↑ Your code here
 
-        expect(observable$).toBeObservable(hot('--e---g----eg----f-e', {
+        expect(observable$).toBeObservable(hot('--e---g------eg--f-e', {
             e: 'Hello', g: 'Hallo', f: 'Bonjour',
         }))
 
@@ -183,6 +172,38 @@ describe('operators', () => {
         // returned.
     })
 })
+
+describe('handle errors', () => {
+
+    it('return the user gast when an error occurs and return the codes of the users in the observable ', () => {
+
+        let observable$ = getCurrentUsersWithError().pipe(
+            catchError((_) => of(gast)),
+            map(user => user?.code)
+        );
+
+        expect(observable$).toBeObservable(cold('--a---b-c-(d|)',
+            {a: albert.code, b: berta.code, c: charlotte.code, d: gast.code}));
+
+        // When an error occurs return an observable of the user gast. Return the code of every user in the observable.
+    });
+
+    it('experiment what happens when you turn things around', () => {
+
+        let observable$ = getCurrentUsersWithError().pipe(
+            map(user => user?.code),
+            catchError((_) => of(gast))
+        );
+
+        // ↓ Your code here
+        expect(observable$).toBeObservable(cold('--a---b-c-(e|)',
+            {a: albert.code, b: berta.code, c: charlotte.code, e: gast}))
+        // ↑ Your code here
+
+        // When an error occurs we again return the user gast. What should be the expected outcome of the example above.
+    });
+
+});
 
 describe('game lobby', () => {
 
