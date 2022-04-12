@@ -1,5 +1,5 @@
 import { cold, hot } from 'jest-marbles'
-import { combineLatest, concat, distinct, filter, forkJoin, map, merge, partition, race, tap } from 'rxjs'
+import { combineLatest, concat, distinct, distinctUntilChanged, filter, forkJoin, map, merge, partition, race, tap } from 'rxjs'
 import {
     getActiveCart,
     getActiveLanguage,
@@ -10,66 +10,6 @@ import {
 } from '../chaining/chainingDemoApp'
 import { created, verified } from '../chaining/status'
 import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../chaining/users'
-import { getAllDogs, getMealSources } from './combiningDemoApp'
-import { calli, fay, lucky, wastl } from './dogs'
-import { chicken, minerals, turkey, veggies } from './foods'
-
-describe('combining', () => {
-
-
-    it('race', () => {
-        // WIP
-        const ping = (serverId: number) => serverId === 1 ? cold('-(a|)') : cold('----(1|)')
-        const addDiscounts = (serverId: number) => serverId === 1 ? cold('----(b|)') : cold('---(2|)')
-        const addVat = (serverId: number) => serverId === 1 ? cold('-(c|)') : cold('--(3|)')
-        const calcPrices = (serverId: number) => serverId === 1 ? cold('--(d|)') : cold('---(4|)')
-
-        const server1Workflow = concat(ping(1), addDiscounts(1), addVat(1), calcPrices(1))
-        const server2Workflow = concat(ping(2), addDiscounts(2), addVat(2), calcPrices(2))
-
-        let finalWorkflow = race([server1Workflow, server2Workflow])
-
-        expect(finalWorkflow).toBeObservable(cold('-a---bc-(d|)'))
-    })
-    // '--f--c----lw|'
-    // '-t---m---v--c|'
-    it('merging dogs with food', () => {
-
-        const combined$ = merge(getAllDogs(), getMealSources())
-
-
-
-        expect(combined$).toBeObservable(cold('-tf--(cm)vlwh|', {
-            t: turkey,
-            f: fay,
-            m: minerals,
-            c: calli,
-            v: veggies,
-            l: lucky,
-            w: wastl,
-            h: chicken,
-        }))
-
-        // WIP
-        combineLatest([getCurrentUser(), getActiveLanguage()]).pipe(
-            map(([user, lang]) => `${getHelloInLanguage(lang)} ${user.name}`))
-    })
-
-    it('combineLatest', () => {
-
-        const combined$ = combineLatest([getAllDogs(), getMealSources()])
-
-        expect(combined$).toBeObservable(cold('--a--(bc)defg|', {
-            a: [fay, turkey],
-            b: [calli, turkey],
-            c: [calli, minerals],
-            d: [calli, veggies],
-            e: [lucky, veggies],
-            f: [wastl, veggies],
-            g: [wastl, chicken],
-        }))
-    })
-})
 
 describe('demo app', () => {
     describe('combining', () => {
@@ -132,16 +72,6 @@ describe('demo app', () => {
             // Split the getCurrentUser$ observable into two observables one with the errorCases (eric and null) and one with the correct users
         })
 
-        it('', () => {
-
-            // ↓ Your code here
-            const combined$ = concat(getStatus(albert.code), getStatus(berta.code))
-            // ↑ Your code here
-
-            expect(combined$).toBeObservable(cold('-c--v-c|',
-                {c: created, v: verified}))
-        })
-
         it('concat with order', () => {
 
             const combined$ = concat(getStatus(charlotte.code), getStatus(albert.code), getStatus(berta.code))
@@ -156,11 +86,65 @@ describe('demo app', () => {
 
         it('concat with hot', () => {
 
-            const combined$ = concat(getCurrentUser(), getActiveCart())
+            const combined$ = concat(getCurrentUser(), getActiveCart());
 
+            // ↓ Your code here
             expect(combined$).toBeObservable(hot('0--a----b--dc--e--ab---h',
                 {a: albert, b: berta, c: charlotte, d: dora, e: eric, h: herta, 0: null}))
+            // ↑ Your code here
+
+            // Concatenate two hot observables and try to predict the outcome
         })
 
+        it('for the finalWorkflow use the server with faster response time', () => {
+
+            const ping = (serverId: number) => serverId === 1 ? cold('-(a|)') : cold('----(1|)')
+            const addDiscounts = (serverId: number) => serverId === 1 ? cold('----(b|)') : cold('--(2|)')
+            const addVat = (serverId: number) => serverId === 1 ? cold('-(c|)') : cold('--(3|)')
+            const calcPrices = (serverId: number) => serverId === 1 ? cold('--(d|)') : cold('--(4|)')
+
+            const server1Workflow = concat(ping(1), addDiscounts(1), addVat(1), calcPrices(1))
+            const server2Workflow = concat(ping(2), addDiscounts(2), addVat(2), calcPrices(2))
+
+            // ↓ Your code here
+            let finalWorkflow = race([server1Workflow, server2Workflow])
+            // ↑ Your code here
+
+            expect(finalWorkflow).toBeObservable(cold('-a---bc-(d|)'))
+
+            // We have a workflow which includes ping, addDiscount, addVat and calcPrices. The final Workflow should
+            // only query the faster one of the two servers.
+        })
+
+        it('greet the current user in the currently selected language', () => {
+
+            // ↓ Your code here
+            const observable$ = combineLatest([getCurrentUser(), getActiveLanguage()]).pipe(
+                filter(([user, lang]) => !!user && !!lang),
+                map(([user, lang]) => `${getHelloInLanguage(lang)} ${user.name}`),
+                distinctUntilChanged()
+            );
+            // ↑ Your code here
+
+            expect(observable$).toBeObservable(hot('---a--b-c--defeh-ij(kl)m', {
+                a: 'Hello Albert Ahörnchen',
+                b: 'Hallo Albert Ahörnchen',
+                c: 'Hallo Berta Bhörnchen',
+                d: 'Hallo Dora the Explorer',
+                e: 'Hallo Charlotte Chicoree',
+                f: 'Hello Charlotte Chicoree',
+                g: 'Hello Charlotte Chicoree',
+                h: 'Hallo Eric Erroruser',
+                i: 'Bonjour Eric Erroruser',
+                j: 'Bonjour Albert Ahörnchen',
+                k: 'Bonjour Berta Bhörnchen',
+                l: 'Hello Berta Bhörnchen',
+                m: 'Hello Herta Hertenstein'
+            }));
+
+            // Print out a greeting when a new user connects and when the current user changes the language. A user should not be greeted
+            // twice in the same language.
+        })
     })
 })
+
