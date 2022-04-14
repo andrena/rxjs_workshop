@@ -3,7 +3,7 @@ import { filter, Observable } from 'rxjs'
 import { andrenaKa, andrenaMuc, otherAddress } from './addresses'
 import { cart1, cart2, cart3 } from './carts'
 import { andrena, otherComp } from './companies'
-import { Address, Cart, Company, Language, User } from './model'
+import { Address, Cart, Company, Language, Status, User } from './model'
 import { created, verified } from './status'
 import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './users'
 import { english, french, german } from './languages';
@@ -57,7 +57,7 @@ export function getWorkingCurrentUser(): Observable<User> {
     )
 }
 
-export function getStatus(userCode: string) {
+export function getStatus(userCode: string): Observable<Status> {
     switch (userCode) {
         case albert.code:
             return cold('-c--v|', {c: created, v: verified})

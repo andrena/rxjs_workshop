@@ -1,4 +1,4 @@
-import { from, take } from 'rxjs'
+import { distinctUntilChanged, filter, from, map, of, take } from 'rxjs'
 
 type Route = {
     id: string
@@ -38,8 +38,5 @@ const currentRouteObservable = from([{
     },
 }] as Route[])
 
-currentRouteObservable.pipe(
-    take(2),
-).subscribe(value => console.log(value))
 
 // map, filter, take
