@@ -22,7 +22,7 @@ Aktueller Plan des Ablaufs
 XX min - Interaktive Session: Piping (ohne Marbles)
 10 min - Observables durch Marbles veranschaulichen (Fabian)
      Marble-Diagramme ermöglichen uns die grafische Darstellung der zeitlichen Abfolge von Observables und Operationen, die auf diesen durchgeführt werden. Dadurch können komplexe Sachverhalte einfacher verstanden werden.
-15 min - Marble Syntax und Tests - live Demo (Fabian)
+15 min - Marble Syntax und Tests - live Demo (Fabian) (18 Minuten)
 
 40
 15/25
