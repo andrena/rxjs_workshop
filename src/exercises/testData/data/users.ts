@@ -1,4 +1,4 @@
-import { User } from './model'
+import { User } from '../dataModel'
 
 export const albert: User = {
     code: 'a_user',

@@ -17,6 +17,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "test:piping": "jest exercises/01-piping",
+    "test:combining": "jest exercises/02-combining",
+    "test:chaining": "jest exercises/03-chaining"
   }
 }

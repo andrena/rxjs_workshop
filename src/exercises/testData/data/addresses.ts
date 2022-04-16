@@ -1,4 +1,4 @@
-import { Address } from './model'
+import { Address } from '../dataModel'
 
 export const andrenaKa: Address = {
     line1: 'Albert-Nestler-Straße 9',

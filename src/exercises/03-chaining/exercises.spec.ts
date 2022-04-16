@@ -12,12 +12,12 @@ import {
     switchMap,
     take,
 } from 'rxjs'
-import { andrenaKa, andrenaMuc } from './addresses'
-import { getAddresses, getCompany, getCurrentUser, getStatus, getWorkingCurrentUser } from './chainingDemoApp'
-import { andrena, otherComp } from './companies'
-import { Address, Company, Status, User } from './model'
-import { created, verified } from './status'
-import { albert, berta, charlotte, dora, eric, herta } from './users'
+import { andrenaKa, andrenaMuc } from '../testData/data/addresses'
+import { getAddresses, getCompany, getCurrentUser, getStatus, getWorkingCurrentUser } from '../testData/providerFunctions'
+import { andrena, otherComp } from '../testData/data/companies'
+import { Address, Company, Status, User } from '../testData/dataModel'
+import { created, verified } from '../testData/data/status'
+import { albert, berta, charlotte, dora, eric, herta } from '../testData/data/users'
 
 const timer = jest.fn((sleep: number) => cold('----0', {0: 0}))
 

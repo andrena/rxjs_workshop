@@ -1,4 +1,4 @@
-import { Company } from './model'
+import { Company } from '../dataModel'
 
 export const andrena: Company = 'andrena'
 

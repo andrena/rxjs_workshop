@@ -1,6 +1,8 @@
 import { cold } from 'jest-marbles'
 import { concat, map, mergeMap, MonoTypeOperatorFunction, Observable, scan, startWith, switchMap } from 'rxjs'
 
+// Mocked rxjs functions that work as the original in the context of marble tests
+
 export const delay: <T>(duration: number) => MonoTypeOperatorFunction<T> =
     (duration) => (
         obs => obs.pipe(

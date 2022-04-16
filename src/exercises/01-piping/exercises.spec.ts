@@ -19,11 +19,11 @@ import {
     takeUntil,
     tap,
 } from 'rxjs'
-import { cart1, cart2 } from '../chaining/carts'
-import { getActiveCart, getActiveLanguage, getCurrentUser, getCurrentUsersWithError, getHelloInLanguage } from '../chaining/chainingDemoApp'
-import { english, french, german } from '../chaining/languages'
-import { User } from '../chaining/model'
-import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../chaining/users'
+import { cart1, cart2 } from '../testData/data/carts'
+import { getActiveCart, getActiveLanguage, getCurrentUser, getCurrentUsersWithError, getHelloInLanguage } from '../testData/providerFunctions'
+import { english, french, german } from '../testData/data/languages'
+import { User } from '../testData/dataModel'
+import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../testData/data/users'
 import { debounceTime, delay, interval, timer } from '../testHelper'
 
 describe('creation', () => {
