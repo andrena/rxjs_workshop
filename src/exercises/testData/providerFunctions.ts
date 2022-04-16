@@ -39,10 +39,6 @@ export function getCurrentUser(): Observable<User> {
     })
 }
 
-export function getCurrentUsersWithError(): Observable<User> {
-    return hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor});
-}
-
 
 export function getInactiveUsers(): Observable<User> {
     return cold('---g-----f|', {

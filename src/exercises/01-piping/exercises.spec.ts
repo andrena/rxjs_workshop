@@ -17,223 +17,247 @@ import {
     startWith,
     take,
     takeUntil,
-    tap,
 } from 'rxjs'
-import { cart1, cart2 } from '../testData/data/carts'
-import { getActiveCart, getActiveLanguage, getCurrentUser, getCurrentUsersWithError, getHelloInLanguage } from '../testData/providerFunctions'
 import { english, french, german } from '../testData/data/languages'
-import { User } from '../testData/dataModel'
 import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../testData/data/users'
+import { Language, User } from '../testData/dataModel'
+import { getActiveLanguage, getHelloInLanguage } from '../testData/providerFunctions'
 import { debounceTime, delay, interval, timer } from '../testHelper'
 
-describe('creation', () => {
+describe('piping', () => {
+    describe('not exercises, just some illustrations', () => {
+        const numbers: number[] = [1, 2, 3, 5, 8, 13]
 
-    const numbers: number[] = [1, 2, 3, 5, 8, 13]
+        it('create an observable with single emit', () => {
 
-    it('create an observable with single emit', () => {
+            // ↓ Your code here
+            const observable$ = of(numbers)
+            // ↑ Your code here
 
-        // ↓ Your code here
-        let observable$ = of(numbers)
-        // ↑ Your code here
+            expect(observable$).toBeObservable(cold('(a|)', {
+                a: numbers,
+            }))
 
-        expect(observable$).toBeObservable(cold('(a|)', {
-            a: numbers,
-        }))
+            // of() creates a cold observable that immediately emits the given value and completes when being subscribed to.
+        })
 
-        // Create an observable that emits numbers as a single value. Keep in mind, that the observable should only emit once.
-    })
+        it('create an observable with multiple emits', () => {
 
-    it('create an observable with multiple emits', () => {
+            // ↓ Your code here
+            const observable$ = from(numbers)
+            // ↑ Your code here
 
-        // ↓ Your code here
-        let observable$ = from(numbers)
-        // ↑ Your code here
+            expect(observable$).toBeObservable(cold('(abcdef|)', {
+                a: 1, b: 2, c: 3, d: 5, e: 8, f: 13,
+            }))
 
-        expect(observable$).toBeObservable(cold('(abcdef|)', {
-            a: 1, b: 2, c: 3, d: 5, e: 8, f: 13,
-        }))
-
-        // Create an observable that emits the content of the numbers array. Each value should be in the timeline.
-    })
-})
-
-describe('operators', () => {
-
-    it('the websites standard should be german at the start', () => {
-
-        // ↓ Your code here
-        let observable$ = getActiveLanguage().pipe(
-            startWith(german),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(hot('g-e--eg--g---eg--f-e',
-            {e: english, g: german, f: french},
-        ))
-
-        // At the start the active language displayed on the website should be german. At the moment we only have the changes by the user
-        // in the observable getActiveLanguage. Add the language german to the start.
-    })
-
-    it('first value', () => {
-
-        // ↓ Your code here
-        let observable$ = getCurrentUser().pipe(
-            take(1),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(cold('(0|)', {
-            0: null,
-        }))
-
-        // Only retrieve the first value out of the observable. There are multiple ways to do this.
-    })
-
-    it('retrieve first non-null value', () => {
-
-        // ↓ Your code here
-        let observable$ = getCurrentUser().pipe(
-            first(user => !!user),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(cold('---(a|)', {
-            a: albert,
-        }))
-
-        // Only retrieve the first non-null value from the observable. Try to do this with one operator.
-    })
-
-    it('skip first value', () => {
-
-        // ↓ Your code here
-        let observable$ = getCurrentUser().pipe(
-            skip(1),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(cold('---a----b--dc--e--ab---h',
-            {a: albert, b: berta, c: charlotte, d: dora, e: eric, h: herta}))
-
-        // Skip the first value.
-    })
-
-    it('return code of adolescent valid users', () => {
-
-        let observable$ = getCurrentUser().pipe(
-            filter(user => user?.age >= 18 && (!user?.name.includes('hörnchen'))),
-            map(user => user.code),
-        )
-
-        expect(observable$).toBeObservable(hot('------------c----------h', {
-            c: 'c_user', h: 'h_user',
-        }))
-
-        // From the current user observable only retrieve users older than 18 and remove the test
-        // users which have a 'hörnchen' in their name. Then return the code of the users matching.
-    })
-
-    it('only take until the discount time observable emits', () => {
-
-        let discountEnd$ = cold('--------(a|)')
-        let applyDiscount = jest.fn()
-
-        // ↓ Your code here
-        let observable$ = getActiveCart().pipe(
-            takeUntil(discountEnd$),
-            filter(cart => !!cart),
-            tap(cart => applyDiscount(cart)),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(cold('----a--b|', {
-            a: cart1, b: cart2,
-        }))
-
-        // During an event a discount is applied to all carts until the event stops signaled by the discount End observable.
-        // Each Cart emitted during that time should get a discount. Null values should not be regarded.
-    })
-
-    it('return hello message on language change', () => {
-
-        // ↓ Your code here
-        let observable$ = getActiveLanguage().pipe(
-            distinctUntilChanged(),
-            map(lang => getHelloInLanguage(lang)),
-        )
-        // ↑ Your code here
-
-        expect(observable$).toBeObservable(hot('--e---g------eg--f-e', {
-            e: 'Hello', g: 'Hallo', f: 'Bonjour',
-        }))
-
-        // Return the hello message on language changes. When the users selects the currently active language again no message should be
-        // returned.
-    })
-})
-
-describe('handle errors', () => {
-
-    it('return the user gast when an error occurs and return the codes of the users in the observable ', () => {
-
-        let observable$ = getCurrentUsersWithError().pipe(
-            catchError((_) => of(gast)),
-            map(user => user?.code)
-        );
-
-        expect(observable$).toBeObservable(cold('--a---b-c-(d|)',
-            {a: albert.code, b: berta.code, c: charlotte.code, d: gast.code}));
-
-        // When an error occurs return an observable of the user gast. Return the code of every user in the observable.
-    });
-
-    it('experiment what happens when you turn things around', () => {
-
-        let observable$ = getCurrentUsersWithError().pipe(
-            map(user => user?.code),
-            catchError((_) => of(gast))
-        );
-
-        // ↓ Your code here
-        expect(observable$).toBeObservable(cold('--a---b-c-(e|)',
-            {a: albert.code, b: berta.code, c: charlotte.code, e: gast}))
-        // ↑ Your code here
-
-        // When an error occurs we again return the user gast. What should be the expected outcome of the example above.
-    });
-
-});
-
-describe('game lobby', () => {
-
-    // Let's say we have a digital lobby for some game.
-    // Users can join all the time, new games start, raffles are held, ...
-
-    let joiningUser$: Observable<User>
-
-    beforeEach(() => {
-        // Here is an observable that emits each time a new user joins the lobby.
-        // First albert joins, after 40 frames berta and then herta, and so on.
-        joiningUser$ = hot('-a---bh----d-g---fc--e', {
-            a: albert,
-            b: berta,
-            c: charlotte,
-            d: dora,
-            e: eric,
-            f: frida,
-            g: gregor,
-            h: herta,
+            // from() takes an array and creates a cold observable that immediately emits the entries of this array,
+            // one by one, and finally completes when being subscribed to.
         })
     })
 
-    describe('evaluate ages', () => {
-        it('get maximum age of first five users', () => {
+    describe('exercises', () => {
+
+        // Let's say we have a digital lobby for some game.
+        // Users can join all the time, new games start, raffles are held, ...
+
+        let joiningUser$: Observable<User>
+
+        beforeEach(() => {
+            // Here is an observable that emits each time a new user joins the lobby.
+            // First albert joins, after 40 frames berta and then herta, and so on.
+            joiningUser$ = hot('-a---bh----d-g---fc--e', {
+                a: albert,
+                b: berta,
+                c: charlotte,
+                d: dora,
+                e: eric,
+                f: frida,
+                g: gregor,
+                h: herta,
+            })
+        })
+
+        it('map: get user names', () => {
+            const activeUserName$: Observable<string> = joiningUser$.pipe(
+                // ↓ Your code here
+                map(user => user.name),
+                // ↑ Your code here
+            )
+
+            expect(activeUserName$).toBeObservable(cold('-a---bh----d-g---fc--e',
+                {
+                    a: albert.name,
+                    b: berta.name,
+                    c: charlotte.name,
+                    d: dora.name,
+                    e: eric.name,
+                    f: frida.name,
+                    g: gregor.name,
+                    h: herta.name,
+                }))
+
+            // Create an observable that returns the active user's name
+        })
+
+        it('take: first value', () => {
+            const firstUser: Observable<User> = joiningUser$.pipe(
+                // ↓ Your code here
+                take(1),
+                // ↑ Your code here
+            )
+
+            expect(firstUser).toBeObservable(cold('-(a|)', {
+                a: albert,
+            }))
+
+            // Only retrieve the first value out of the observable. There are multiple ways to do this.
+        })
+
+        it('startWith: the default language should be german at the start', () => {
+            const activeLangWithDefault$: Observable<Language> = getActiveLanguage().pipe(
+                // ↓ Your code here
+                startWith(german),
+                // ↑ Your code here
+            )
+
+            expect(activeLangWithDefault$).toBeObservable(hot('g-e--eg--g---eg--f-e',
+                {e: english, g: german, f: french},
+            ))
+
+            // At the start the active language displayed on the website should be german. At the moment we only have
+            // the changes by the user in the observable getActiveLanguage.
+            // Add german as initial value of the observable.
+        })
+
+        it('first: retrieve first user that is younger than 18', () => {
+            const firstActualUser$: Observable<User> = joiningUser$.pipe(
+                // ↓ Your code here
+                first(user => user.age < 18),
+                // ↑ Your code here
+            )
+
+            expect(firstActualUser$).toBeObservable(cold('-----------(a|)', {
+                a: dora,
+            }))
+
+            // Only retrieve the first non-null value from the observable. Try to do this with one operator.
+        })
+
+        it('skip: skip first value', () => {
+            const fromSecondUser$: Observable<User> = joiningUser$.pipe(
+                // ↓ Your code here
+                skip(1),
+                // ↑ Your code here
+            )
+
+            expect(fromSecondUser$).toBeObservable(cold('-----bh----d-g---fc--e',
+                {a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, h: herta}))
+
+            // Skip the first value.
+        })
+
+        it('filter, map: return code of adolescent users', () => {
+            const adultUserCode$: Observable<string> = joiningUser$.pipe(
+                // ↓ Your code here
+                filter(user => user?.age >= 18),
+                map(user => user.code),
+                // ↑ Your code here
+            )
+
+            expect(adultUserCode$).toBeObservable(hot('-a---bh------g----c--e', {
+                a: albert.code,
+                b: berta.code,
+                c: charlotte.code,
+                e: eric.code,
+                g: gregor.code,
+                h: herta.code,
+            }))
+
+            // From the current user observable only retrieve users older than 18. Then return the code of the users matching.
+        })
+
+        it('takeUntil, filter, map: only take until the discount time observable emits', () => {
+            // Only emit users as long as this observable has not emitted
+            const lobbyClosed$ = cold('--------(x|)')
+
+            const newUserInLobby$: Observable<User> = joiningUser$.pipe(
+                // ↓ Your code here
+                takeUntil(lobbyClosed$),
+                // ↑ Your code here
+            )
+
+            expect(newUserInLobby$).toBeObservable(cold('-a---bh-|', {
+                a: albert, b: berta, h: herta,
+            }))
+
+            // We can only let users into the lobby as long as it has not closed yet. We have an observable lobbyClosed$
+            // that will emit (and complete) when the lobby closes.
+            // Create an observable that emits the joiningUsers as long as the lobby is open.
+        })
+
+        it('distinctUntilChanged, map: return hello message on language change', () => {
+
+            const helloMessage$: Observable<string> = getActiveLanguage().pipe(
+                // ↓ Your code here
+                distinctUntilChanged(),
+                map(lang => getHelloInLanguage(lang)),
+                // ↑ Your code here
+            )
+
+            expect(helloMessage$).toBeObservable(hot('--e---g------eg--f-e', {
+                e: 'Hello', g: 'Hallo', f: 'Bonjour',
+            }))
+
+            // Return the hello message on language changes. When the users selects the currently active language again no message should be
+            // returned.
+        })
+
+        describe('handle errors', () => {
+
+            let usersWithError$: Observable<User>
+
+            beforeEach(() => {
+                usersWithError$ = hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor})
+            })
+
+            it('catchError, map: return the user gast when an error occurs and return the codes of the users in the observable ', () => {
+                const user$: Observable<string> = usersWithError$.pipe(
+                    // ↓ Your code here
+                    catchError((_) => of(gast)),
+                    map(user => user?.code),
+                    // ↑ Your code here
+                )
+
+                expect(user$).toBeObservable(cold('--a---b-c-(d|)',
+                    {a: albert.code, b: berta.code, c: charlotte.code, d: gast.code}))
+
+                // When an error occurs return an observable of the user gast. Return the code of every user in the observable.
+            })
+
+            it('catchError, map: experiment what happens when you turn things around', () => {
+                const user$ = usersWithError$.pipe(
+                    map(user => user?.code),
+                    catchError((_) => of(gast)),
+                )
+
+                expect(user$).toBeObservable(
+                    // ↓ Your code here
+                    cold('--a---b-c-(e|)',
+                        {a: albert.code, b: berta.code, c: charlotte.code, e: gast}),
+                    // ↑ Your code here
+                )
+
+                // When an error occurs we again return the user gast. What should be the expected outcome of the example above.
+            })
+
+        })
+
+        it('map, take, max: get maximum age of first five users', () => {
             let maxAge$: Observable<number>
 
             maxAge$ = joiningUser$.pipe(
                 // ↓ Your code here
-                filter(user => user.code !== eric.code),
                 map(user => user.age),
                 take(5),
                 max(),
@@ -249,198 +273,187 @@ describe('game lobby', () => {
             // Question: Why does this only work if we restrict the number of users we want to investigate?
         })
 
-        describe('scan vs reduce', () => {
-            it('get average age of first five users (ignore eric)', () => {
-                let averageAge$: Observable<number>
+        it('map, take, reduce: get average age of first five users', () => {
+            let averageAge$: Observable<number>
 
-                let users$ = joiningUser$
-                // users$ = hot('--a--b|', {a: albert, b: berta})
-                averageAge$ = users$.pipe(
-                    // ↓ Your code here
-                    filter(user => user.code !== eric.code),
-                    map(user => user.age),
-                    take(5),
-                    reduce((avg, current, index) => (avg * index + current) / (index + 1)),
-                    // ↑ Your code here
-                )
+            let users$ = joiningUser$
+            // users$ = hot('--a--b|', {a: albert, b: berta})
+            averageAge$ = users$.pipe(
+                // ↓ Your code here
+                map(user => user.age),
+                take(5),
+                reduce((avg, current, index) => (avg * index + current) / (index + 1)),
+                // ↑ Your code here
+            )
 
-                let expectedResult$ = cold('-------------(a|)', {
-                    a: 41.6,
-                })
-                // expectedResult$ = cold('------(x|)', {x: 54})
-                expect(averageAge$).toBeObservable(expectedResult$)
-                // Additionally to the maximum age, we also want to know the average age of the first five users.
-                // Bonus:
-                // Does your implementation also work when uncommenting the commented out code?
+            let expectedResult$ = cold('-------------(a|)', {
+                a: 41.6,
             })
-
-            it('get running average age of users (ignore eric)', () => {
-                let maxAge$: Observable<number>
-                let averageAge$: Observable<number>
-
-                maxAge$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    filter(user => user.code !== eric.code),
-                    map(user => user.age),
-                    scan((max, current) => max > current ? max : current),
-                    // ↑ Your code here
-                )
-
-                averageAge$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    filter(user => user.code !== eric.code),
-                    map(user => user.age),
-                    scan((avg, current, index) => (avg * index + current) / (index + 1)),
-                    // ↑ Your code here
-                )
-
-                expect(maxAge$).toBeObservable(cold('-1---23----4-5---67', {
-                    1: 78,
-                    2: 78,
-                    3: 78,
-                    4: 78,
-                    5: 78,
-                    6: 78,
-                    7: 78,
-                }))
-                expect(averageAge$).toBeObservable(cold('-1---23----4-5---67', {
-                    1: 78,
-                    2: 54,
-                    3: 54,
-                    4: 42,
-                    5: 41.6,
-                    6: 37,
-                    7: 38,
-                }))
-                // Restricting our statistics the a set number of users is not ideal. Can you create two new observables that:
-                // 1: return the new maximum each time a user joins
-                // 2: returns the new average age each time a user joins?
-            })
-        })
-    })
-
-    describe('grouping', () => {
-        describe('join message', () => {
-            it('only consecutive joins', () => {
-                let userChangeMessage$: Observable<string>
-
-                userChangeMessage$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    pairwise(),
-                    map(([previousUser, newUser]) => `${newUser.name} joined after ${previousUser.name}`),
-                    // ↑ Your code here
-                )
-
-                expect(userChangeMessage$).toBeObservable(cold('-----12----3-4---56--7', {
-                        1: `${berta.name} joined after ${albert.name}`,
-                        2: `${herta.name} joined after ${berta.name}`,
-                        3: `${dora.name} joined after ${herta.name}`,
-                        4: `${gregor.name} joined after ${dora.name}`,
-                        5: `${frida.name} joined after ${gregor.name}`,
-                        6: `${charlotte.name} joined after ${frida.name}`,
-                        7: `${eric.name} joined after ${charlotte.name}`,
-                    }),
-                )
-                // We want to display a message each time a new user joins.
-                // The message text should be 'NEWUSER_NAME joined after PREVIOUSUSER_NAME'.
-                // This message makes only sense once the second user joined because before that there
-                // is no previous user.
-                // Create an observable that emits the message for all users, beginning with the second.
-            })
-
-            it('include initial login', () => {
-                let userChangeMessage$: Observable<string>
-
-                userChangeMessage$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    startWith(null),
-                    pairwise(),
-                    map(([previousUser, newUser]) => previousUser ?
-                        `${newUser.name} joined after ${previousUser.name}`
-                        : `${newUser.name} joined the lobby`),
-                    // ↑ Your code here
-                )
-
-                expect(userChangeMessage$).toBeObservable(cold('-0---12----3-4---56--7', {
-                        0: `${albert.name} joined the lobby`,
-                        1: `${berta.name} joined after ${albert.name}`,
-                        2: `${herta.name} joined after ${berta.name}`,
-                        3: `${dora.name} joined after ${herta.name}`,
-                        4: `${gregor.name} joined after ${dora.name}`,
-                        5: `${frida.name} joined after ${gregor.name}`,
-                        6: `${charlotte.name} joined after ${frida.name}`,
-                        7: `${eric.name} joined after ${charlotte.name}`,
-                    }),
-                )
-                // The same as above. However, this time we also want to show a message
-                // when the first user joins: 'FIRSTUSER_NAME joined the lobby'.
-                // Extend your previous solution to fulfill this requirement.
-            })
+            // expectedResult$ = cold('------(x|)', {x: 54})
+            expect(averageAge$).toBeObservable(expectedResult$)
+            // Additionally to the maximum age, we also want to know the average age of the first five users.
+            // Bonus:
+            // Does your implementation also work when uncommenting the commented out code?
         })
 
-        describe('match making', () => {
-            it('create group of 3', () => {
-                let groups$: Observable<User[]>
+        it('map, scan: get running average age of users', () => {
+            let maxAge$: Observable<number>
+            let averageAge$: Observable<number>
 
-                groups$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    bufferCount(3),
-                    // ↑ Your code here
-                )
+            maxAge$ = joiningUser$.pipe(
+                // ↓ Your code here
+                map(user => user.age),
+                scan((max, current) => max > current ? max : current),
+                // ↑ Your code here
+            )
 
-                expect(groups$).toBeObservable(cold('------1----------2', {
-                    1: [albert, berta, herta],
-                    2: [dora, gregor, frida],
-                }))
-                // The game always requires three people per match.
-                // So whenever there have enough people joined the lobby to start a match, they should be grouped.
-                // Create an observable that emits such a group whenever there have enough people joined.
-            })
+            averageAge$ = joiningUser$.pipe(
+                // ↓ Your code here
+                map(user => user.age),
+                scan((avg, current, index) => (avg * index + current) / (index + 1)),
+                // ↑ Your code here
+            )
 
-            it('get neighbors', () => {
-                type UserWithNeighbors = {
-                    user: User,
-                    leftNeighbor: User,
-                    rightNeighbor: User
-                }
-
-                let teams$: Observable<UserWithNeighbors>
-
-                teams$ = joiningUser$.pipe(
-                    // ↓ Your code here
-                    startWith(null),
-                    bufferCount(3, 1),
-                    map(([left, user, right]) => (
-                        {user, leftNeighbor: left, rightNeighbor: right}
-                    )),
-                    // ↑ Your code here
-                )
-
-                expect(teams$).toBeObservable(cold('-----12----3-4---56--7', {
-                    1: {user: albert, leftNeighbor: null, rightNeighbor: berta},
-                    2: {user: berta, leftNeighbor: albert, rightNeighbor: herta},
-                    3: {user: herta, leftNeighbor: berta, rightNeighbor: dora},
-                    4: {user: dora, leftNeighbor: herta, rightNeighbor: gregor},
-                    5: {user: gregor, leftNeighbor: dora, rightNeighbor: frida},
-                    6: {user: frida, leftNeighbor: gregor, rightNeighbor: charlotte},
-                    7: {user: charlotte, leftNeighbor: frida, rightNeighbor: eric},
-                }))
-                // There is also a metagame in the lobby. A raffle is held and if one player wins,
-                // his/her neighbors have a higher chance of winning the next raffle.
-                // Therefore, we need to determine the left and right neighbors of each player.
-                // This is done strictly by the order they joined. The first player has no left neighbor
-                // and the second player as right neighbar. The second player has the first one as first neighbor
-                // and the third one as right neighbor. And so on.
-                // Create an observable that emits the users together with their neighbors
-                // (see the type UserWithNeighbors above).
-                // Hint: The first user can only be emitted when the second player has joined. Otherwise it's not possible
-                // to determine the right neighbor.
-            })
+            expect(maxAge$).toBeObservable(cold('-1---23----4-5---67--8', {
+                1: 78,
+                2: 78,
+                3: 78,
+                4: 78,
+                5: 78,
+                6: 78,
+                7: 78,
+                8: 78,
+            }))
+            expect(averageAge$).toBeObservable(cold('-1---23----4-5---67--8', {
+                1: 78,
+                2: 54,
+                3: 54,
+                4: 42,
+                5: 41.6,
+                6: 37,
+                7: 38,
+                8: 38,
+            }))
+            // Restricting our statistics the a set number of users is not ideal. Can you create two new observables that:
+            // 1: return the new maximum each time a user joins
+            // 2: returns the new average age each time a user joins?
         })
-    })
 
-    describe('timing', () => {
-        it('show delayed welcome message after a user logged in', () => {
+        it('pairwise, map: display consecutive joins', () => {
+            let userChangeMessage$: Observable<string>
+
+            userChangeMessage$ = joiningUser$.pipe(
+                // ↓ Your code here
+                pairwise(),
+                map(([previousUser, newUser]) => `${newUser.name} joined after ${previousUser.name}`),
+                // ↑ Your code here
+            )
+
+            expect(userChangeMessage$).toBeObservable(cold('-----12----3-4---56--7', {
+                    1: `${berta.name} joined after ${albert.name}`,
+                    2: `${herta.name} joined after ${berta.name}`,
+                    3: `${dora.name} joined after ${herta.name}`,
+                    4: `${gregor.name} joined after ${dora.name}`,
+                    5: `${frida.name} joined after ${gregor.name}`,
+                    6: `${charlotte.name} joined after ${frida.name}`,
+                    7: `${eric.name} joined after ${charlotte.name}`,
+                }),
+            )
+            // We want to display a message each time a new user joins.
+            // The message text should be 'NEWUSER_NAME joined after PREVIOUSUSER_NAME'.
+            // This message makes only sense once the second user joined because before that there
+            // is no previous user.
+            // Create an observable that emits the message for all users, beginning with the second.
+        })
+
+        it('pairwise, startWith, map: display consecutive and initial join', () => {
+            let userChangeMessage$: Observable<string>
+
+            userChangeMessage$ = joiningUser$.pipe(
+                // ↓ Your code here
+                startWith(null),
+                pairwise(),
+                map(([previousUser, newUser]) => previousUser ?
+                    `${newUser.name} joined after ${previousUser.name}`
+                    : `${newUser.name} joined the lobby`),
+                // ↑ Your code here
+            )
+
+            expect(userChangeMessage$).toBeObservable(cold('-0---12----3-4---56--7', {
+                    0: `${albert.name} joined the lobby`,
+                    1: `${berta.name} joined after ${albert.name}`,
+                    2: `${herta.name} joined after ${berta.name}`,
+                    3: `${dora.name} joined after ${herta.name}`,
+                    4: `${gregor.name} joined after ${dora.name}`,
+                    5: `${frida.name} joined after ${gregor.name}`,
+                    6: `${charlotte.name} joined after ${frida.name}`,
+                    7: `${eric.name} joined after ${charlotte.name}`,
+                }),
+            )
+            // The same as above. However, this time we also want to show a message
+            // when the first user joins: 'FIRSTUSER_NAME joined the lobby'.
+            // Extend your previous solution to fulfill this requirement.
+        })
+
+        it('bufferCount: create group of 3 users', () => {
+            let groups$: Observable<User[]>
+
+            groups$ = joiningUser$.pipe(
+                // ↓ Your code here
+                bufferCount(3),
+                // ↑ Your code here
+            )
+
+            expect(groups$).toBeObservable(cold('------1----------2', {
+                1: [albert, berta, herta],
+                2: [dora, gregor, frida],
+            }))
+            // The game always requires three people per match.
+            // So whenever there have enough people joined the lobby to start a match, they should be grouped.
+            // Create an observable that emits such a group whenever there have enough people joined.
+        })
+
+        it('bufferCount, map, startWith: get neighbors of joining users', () => {
+            type UserWithNeighbors = {
+                user: User,
+                leftNeighbor: User,
+                rightNeighbor: User
+            }
+
+            let teams$: Observable<UserWithNeighbors>
+
+            teams$ = joiningUser$.pipe(
+                // ↓ Your code here
+                startWith(null),
+                bufferCount(3, 1),
+                map(([left, user, right]) => (
+                    {user, leftNeighbor: left, rightNeighbor: right}
+                )),
+                // ↑ Your code here
+            )
+
+            expect(teams$).toBeObservable(cold('-----12----3-4---56--7', {
+                1: {user: albert, leftNeighbor: null, rightNeighbor: berta},
+                2: {user: berta, leftNeighbor: albert, rightNeighbor: herta},
+                3: {user: herta, leftNeighbor: berta, rightNeighbor: dora},
+                4: {user: dora, leftNeighbor: herta, rightNeighbor: gregor},
+                5: {user: gregor, leftNeighbor: dora, rightNeighbor: frida},
+                6: {user: frida, leftNeighbor: gregor, rightNeighbor: charlotte},
+                7: {user: charlotte, leftNeighbor: frida, rightNeighbor: eric},
+            }))
+            // There is also a metagame in the lobby. A raffle is held and if one player wins,
+            // his/her neighbors have a higher chance of winning the next raffle.
+            // Therefore, we need to determine the left and right neighbors of each player.
+            // This is done strictly by the order they joined. The first player has no left neighbor
+            // and the second player as right neighbar. The second player has the first one as first neighbor
+            // and the third one as right neighbor. And so on.
+            // Create an observable that emits the users together with their neighbors
+            // (see the type UserWithNeighbors above).
+            // Hint: The first user can only be emitted when the second player has joined. Otherwise it's not possible
+            // to determine the right neighbor.
+        })
+
+        it('delay, map: how delayed welcome message after a user logged in', () => {
             let userWelcomePopupText$: Observable<string>
 
             userWelcomePopupText$ = joiningUser$.pipe(
@@ -471,7 +484,7 @@ describe('game lobby', () => {
             // the actual 'delay', it can be tested better.
         })
 
-        it('debounce welcome message', () => {
+        it('debounceTime, map: debounce welcome message', () => {
             let userWelcomePopupText$: Observable<string>
 
             userWelcomePopupText$ = joiningUser$.pipe(
@@ -500,10 +513,12 @@ describe('game lobby', () => {
             // the actual 'debounce', it can be tested better.
         })
 
-        it('periodically start a new raffle', () => {
+        it('interval, map: periodically start a new raffle', () => {
             let newRaffleMessage$: Observable<string>
 
+            // ↓ Your code here
             newRaffleMessage$ = interval(40).pipe(map(i => `Raffle ${i} begins!`))
+            // ↑ Your code here
 
             expect(newRaffleMessage$.pipe(take(5))).toBeObservable(
                 cold('1---2---3---4---(5|)', {
@@ -523,10 +538,12 @@ describe('game lobby', () => {
             // the actual 'interval', it can be tested better.
         })
 
-        it('close lobby after some time', () => {
+        it('timer, map: close lobby after some time', () => {
             let gameOverMessage$: Observable<string>
 
+            // ↓ Your code here
             gameOverMessage$ = timer(100).pipe(map(() => 'Lobby closes. Good Bye!'))
+            // ↑ Your code here
 
             expect(gameOverMessage$).toBeObservable(
                 cold('----------(x|)', {
@@ -542,11 +559,13 @@ describe('game lobby', () => {
             // the actual 'timer', it can be tested better.
         })
 
-        it('periodically end raffles after some time has passed', () => {
+        it('timer, map: periodically end raffles after some time has passed', () => {
             let raffleEndedMessage$: Observable<string>
 
+            // ↓ Your code here
             raffleEndedMessage$ = timer(100, 40).pipe(
                 map((val) => `Raffle ${val + 1} ended.`))
+            // ↑ Your code here
 
             expect(raffleEndedMessage$.pipe(take(5))).toBeObservable(
                 cold('----------0---1---2---3---(4|)', {
