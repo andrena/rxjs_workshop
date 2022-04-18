@@ -1,4 +1,4 @@
-import { Cart } from './model'
+import { Cart } from '../dataModel'
 
 export const cart1: Cart = {
     id: 'cart1',

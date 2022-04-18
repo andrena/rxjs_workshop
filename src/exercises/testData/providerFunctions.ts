@@ -1,12 +1,12 @@
 import { cold, hot } from 'jest-marbles'
 import { filter, Observable } from 'rxjs'
-import { andrenaKa, andrenaMuc, otherAddress } from './addresses'
-import { cart1, cart2, cart3 } from './carts'
-import { andrena, otherComp } from './companies'
-import { Address, Cart, Company, Language, User } from './model'
-import { created, verified } from './status'
-import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './users'
-import { english, french, german } from './languages';
+import { andrenaKa, andrenaMuc, otherAddress } from './data/addresses'
+import { cart1, cart2, cart3 } from './data/carts'
+import { andrena, otherComp } from './data/companies'
+import { Address, Cart, Company, Language, Status, User } from './dataModel'
+import { created, verified } from './data/status'
+import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from './data/users'
+import { english, french, german } from './data/languages';
 
 export function getActiveLanguage() {
     return hot('--e--eg--g---eg--f-e', {
@@ -39,10 +39,6 @@ export function getCurrentUser(): Observable<User> {
     })
 }
 
-export function getCurrentUsersWithError(): Observable<User> {
-    return hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor});
-}
-
 
 export function getInactiveUsers(): Observable<User> {
     return cold('---g-----f|', {
@@ -51,13 +47,14 @@ export function getInactiveUsers(): Observable<User> {
     })
 }
 
+// getCurrentUser but filter out null and eric
 export function getWorkingCurrentUser(): Observable<User> {
     return getCurrentUser().pipe(
         filter(user => user && user.code !== eric.code),
     )
 }
 
-export function getStatus(userCode: string) {
+export function getStatus(userCode: string): Observable<Status> {
     switch (userCode) {
         case albert.code:
             return cold('-c--v|', {c: created, v: verified})

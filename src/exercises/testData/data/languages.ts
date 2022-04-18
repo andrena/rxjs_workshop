@@ -1,4 +1,4 @@
-import { Language } from './model';
+import { Language } from '../dataModel';
 
 export const german: Language = 'German';
 

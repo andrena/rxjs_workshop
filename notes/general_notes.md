@@ -16,8 +16,8 @@ Handout mit:
 
 Aktueller Plan des Ablaufs
 15 min - Begrüßung und Warum Observables (Beide, Stichpunkte und Text überlegen)
-15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (Marco, nochmal proben, Stichpunkte, evtl. vorbereiten) (erster Probelauf: 21 min)
-10 min - Piping - live Demo (Marco)
+15 min - Unterschied Callback <-> Promise <-> Observables - live Demo (inkl. Unsubscribe) (Marco, nochmal proben, Stichpunkte, evtl. vorbereiten) (erster Probelauf: 21 min)
+15 min - Piping - live Demo (Marco)
 20
 XX min - Interaktive Session: Piping (ohne Marbles)
 10 min - Observables durch Marbles veranschaulichen (Fabian)
@@ -35,7 +35,6 @@ Abhängige Observables: Live Demo mit Marbles, Unterschiede (und Anwendungsfäll
 Beispiele im Code zeigen.
 Interaktive Session: Abhängige Observables
 
-15 min - Unsubscribing - live Demo (Marco, Was genau zeigen)
 5 min - Abschluss
 
 

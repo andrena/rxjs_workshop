@@ -7,9 +7,9 @@ import {
     getHelloInLanguage,
     getInactiveUsers,
     getStatus,
-} from '../chaining/chainingDemoApp'
-import { created, verified } from '../chaining/status'
-import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../chaining/users'
+} from '../testData/providerFunctions'
+import { created, verified } from '../testData/data/status'
+import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../testData/data/users'
 
 describe('demo app', () => {
     describe('combining', () => {

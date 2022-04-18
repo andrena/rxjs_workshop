@@ -1,4 +1,4 @@
-import { User } from './model'
+import { User } from '../dataModel'
 
 export const albert: User = {
     code: 'a_user',
@@ -27,7 +27,7 @@ export const dora: User = {
 export const eric: User = {
     code: 'e_user',
     name: 'Eric Erroruser',
-    age: NaN
+    age: 38
 }
 
 export const frida: User = {
