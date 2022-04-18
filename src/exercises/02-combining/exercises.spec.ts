@@ -14,41 +14,6 @@ import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../t
 describe('demo app', () => {
     describe('combining', () => {
 
-        it('combine current and inactive users and give all a discount', () => {
-
-            const discountForUser = jest.fn()
-
-            // ↓ Your code here
-            const combined$ = merge(getInactiveUsers(), getCurrentUser())
-            const usersWithDiscount$ = combined$.pipe(
-                distinct(),
-                filter(user => user?.code !== eric.code),
-                tap(user => discountForUser(user?.code)),
-            )
-            // ↑ Your code here
-
-            expect(usersWithDiscount$).toBeObservable(cold('0--(ag)-bf-dc----------h', {
-                a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, h: herta, 0: null,
-            }))
-
-            //Extra assert that the function was called in the correct order
-            // ↓ Your code here
-            expect(combined$).toSatisfyOnFlush(() => {
-                expect(discountForUser).toHaveBeenNthCalledWith(1, undefined)
-                expect(discountForUser).toHaveBeenNthCalledWith(2, albert.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(3, gregor.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(4, berta.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(5, frida.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(6, dora.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(7, charlotte.code)
-            })
-            // ↑ Your code here
-
-            // In this case we want to give a discount to all users. For this we have the function discountForUser(String code)
-            // The function excepts the Code that each user has. Make sure that eric does not get a discount.
-            // Make sure that every user gets only one discount. The order is not important.
-        })
-
         it('combine the last current user and the last cart', () => {
 
             const combined$ = forkJoin([getCurrentUser(), getActiveCart()])
@@ -94,6 +59,41 @@ describe('demo app', () => {
             // ↑ Your code here
 
             // Concatenate two hot observables and try to predict the outcome
+        })
+
+        it('combine current and inactive users and give all a discount', () => {
+
+            const discountForUser = jest.fn()
+
+            // ↓ Your code here
+            const combined$ = merge(getInactiveUsers(), getCurrentUser())
+            const usersWithDiscount$ = combined$.pipe(
+                distinct(),
+                filter(user => user?.code !== eric.code),
+                tap(user => discountForUser(user?.code)),
+            )
+            // ↑ Your code here
+
+            expect(usersWithDiscount$).toBeObservable(cold('0--(ag)-bf-dc----------h', {
+                a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, h: herta, 0: null,
+            }))
+
+            //Extra assert that the function was called in the correct order
+            // ↓ Your code here
+            expect(combined$).toSatisfyOnFlush(() => {
+                expect(discountForUser).toHaveBeenNthCalledWith(1, undefined)
+                expect(discountForUser).toHaveBeenNthCalledWith(2, albert.code)
+                expect(discountForUser).toHaveBeenNthCalledWith(3, gregor.code)
+                expect(discountForUser).toHaveBeenNthCalledWith(4, berta.code)
+                expect(discountForUser).toHaveBeenNthCalledWith(5, frida.code)
+                expect(discountForUser).toHaveBeenNthCalledWith(6, dora.code)
+                expect(discountForUser).toHaveBeenNthCalledWith(7, charlotte.code)
+            })
+            // ↑ Your code here
+
+            // In this case we want to give a discount to all users. For this we have the function discountForUser(String code)
+            // The function excepts the Code that each user has. Make sure that eric does not get a discount.
+            // Make sure that every user gets only one discount. The order is not important.
         })
 
         it('for the finalWorkflow use the server with faster response time', () => {

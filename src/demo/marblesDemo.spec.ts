@@ -1,3 +1,6 @@
+import { cold, hot } from 'jest-marbles';
+import { first, map, merge, tap } from 'rxjs';
+
 type Dog = {
     name: string,
     age: number,
@@ -48,7 +51,7 @@ describe('example tests', () => {
 
     });
 
-    it('Error case', () => {
+    it('Error case',() => {
 
     });
 
