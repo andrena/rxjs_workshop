@@ -1,3 +1,5 @@
+// noinspection ES6UnusedImports
+
 import { cold, hot } from 'jest-marbles'
 import {
     bufferCount,
@@ -75,9 +77,9 @@ describe('piping', () => {
         })
 
         it('map: get user names', () => {
+            // @ts-ignore
             const activeUserName$: Observable<string> = joiningUser$.pipe(
                 // ↓ Your code here
-                map(user => user.name),
                 // ↑ Your code here
             )
 
@@ -99,7 +101,6 @@ describe('piping', () => {
         it('take: first value', () => {
             const firstUser: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
-                take(1),
                 // ↑ Your code here
             )
 
@@ -113,7 +114,6 @@ describe('piping', () => {
         it('startWith: the default language should be german at the start', () => {
             const activeLangWithDefault$: Observable<Language> = getActiveLanguage().pipe(
                 // ↓ Your code here
-                startWith(german),
                 // ↑ Your code here
             )
 
@@ -129,7 +129,6 @@ describe('piping', () => {
         it('first: retrieve first user that is younger than 18', () => {
             const firstActualUser$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
-                first(user => user.age < 18),
                 // ↑ Your code here
             )
 
@@ -143,7 +142,6 @@ describe('piping', () => {
         it('skip: skip first value', () => {
             const fromSecondUser$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
-                skip(1),
                 // ↑ Your code here
             )
 
@@ -154,10 +152,9 @@ describe('piping', () => {
         })
 
         it('filter, map: return code of adolescent users', () => {
+            // @ts-ignore
             const adultUserCode$: Observable<string> = joiningUser$.pipe(
                 // ↓ Your code here
-                filter(user => user?.age >= 18),
-                map(user => user.code),
                 // ↑ Your code here
             )
 
@@ -179,7 +176,6 @@ describe('piping', () => {
 
             const newUserInLobby$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
-                takeUntil(lobbyClosed$),
                 // ↑ Your code here
             )
 
@@ -196,8 +192,6 @@ describe('piping', () => {
 
             const helloMessage$: Observable<string> = getActiveLanguage().pipe(
                 // ↓ Your code here
-                distinctUntilChanged(),
-                map(lang => getHelloInLanguage(lang)),
                 // ↑ Your code here
             )
 
@@ -218,10 +212,9 @@ describe('piping', () => {
             })
 
             it('catchError, map: return the user gast when an error occurs and return the codes of the users in the observable ', () => {
+                // @ts-ignore
                 const user$: Observable<string> = usersWithError$.pipe(
                     // ↓ Your code here
-                    catchError((_) => of(gast)),
-                    map(user => user?.code),
                     // ↑ Your code here
                 )
 
@@ -237,10 +230,9 @@ describe('piping', () => {
                     catchError((_) => of(gast)),
                 )
 
+                // @ts-ignore
                 expect(user$).toBeObservable(
                     // ↓ Your code here
-                    cold('--a---b-c-(e|)',
-                        {a: albert.code, b: berta.code, c: charlotte.code, e: gast}),
                     // ↑ Your code here
                 )
 
@@ -252,11 +244,9 @@ describe('piping', () => {
         it('map, take, max: get maximum age of first five users', () => {
             let maxAge$: Observable<number>
 
+            // @ts-ignore
             maxAge$ = joiningUser$.pipe(
                 // ↓ Your code here
-                map(user => user.age),
-                take(5),
-                max(),
                 // ↑ Your code here
             )
 
@@ -274,11 +264,9 @@ describe('piping', () => {
 
             let users$ = joiningUser$
             // users$ = hot('--a--b|', {a: albert, b: berta})
+            // @ts-ignore
             averageAge$ = users$.pipe(
                 // ↓ Your code here
-                map(user => user.age),
-                take(5),
-                reduce((avg, current, index) => (avg * index + current) / (index + 1)),
                 // ↑ Your code here
             )
 
@@ -296,17 +284,15 @@ describe('piping', () => {
             let maxAge$: Observable<number>
             let averageAge$: Observable<number>
 
+            // @ts-ignore
             maxAge$ = joiningUser$.pipe(
                 // ↓ Your code here
-                map(user => user.age),
-                scan((max, current) => max > current ? max : current),
                 // ↑ Your code here
             )
 
+            // @ts-ignore
             averageAge$ = joiningUser$.pipe(
                 // ↓ Your code here
-                map(user => user.age),
-                scan((avg, current, index) => (avg * index + current) / (index + 1)),
                 // ↑ Your code here
             )
 
@@ -338,10 +324,9 @@ describe('piping', () => {
         it('pairwise, map: display consecutive joins', () => {
             let userChangeMessage$: Observable<string>
 
+            // @ts-ignore
             userChangeMessage$ = joiningUser$.pipe(
                 // ↓ Your code here
-                pairwise(),
-                map(([previousUser, newUser]) => `${newUser.name} joined after ${previousUser.name}`),
                 // ↑ Your code here
             )
 
@@ -365,13 +350,9 @@ describe('piping', () => {
         it('pairwise, startWith, map: display consecutive and initial join', () => {
             let userChangeMessage$: Observable<string>
 
+            // @ts-ignore
             userChangeMessage$ = joiningUser$.pipe(
                 // ↓ Your code here
-                startWith(null),
-                pairwise(),
-                map(([previousUser, newUser]) => previousUser ?
-                    `${newUser.name} joined after ${previousUser.name}`
-                    : `${newUser.name} joined the lobby`),
                 // ↑ Your code here
             )
 
@@ -394,9 +375,9 @@ describe('piping', () => {
         it('bufferCount: create group of 3 users', () => {
             let groups$: Observable<User[]>
 
+            // @ts-ignore
             groups$ = joiningUser$.pipe(
                 // ↓ Your code here
-                bufferCount(3),
                 // ↑ Your code here
             )
 
@@ -418,13 +399,9 @@ describe('piping', () => {
 
             let teams$: Observable<UserWithNeighbors>
 
+            // @ts-ignore
             teams$ = joiningUser$.pipe(
                 // ↓ Your code here
-                startWith(null),
-                bufferCount(3, 1),
-                map(([left, user, right]) => (
-                    {user, leftNeighbor: left, rightNeighbor: right}
-                )),
                 // ↑ Your code here
             )
 
@@ -452,10 +429,9 @@ describe('piping', () => {
         it('delay, map: how delayed welcome message after a user logged in', () => {
             let userWelcomePopupText$: Observable<string>
 
+            // @ts-ignore
             userWelcomePopupText$ = joiningUser$.pipe(
                 // ↓ Your code here
-                delay(50),
-                map(user => `User ${user.name} just joined!`),
                 // ↑ Your code here
             )
 
@@ -483,10 +459,9 @@ describe('piping', () => {
         it('debounceTime, map: debounce welcome message', () => {
             let userWelcomePopupText$: Observable<string>
 
+            // @ts-ignore
             userWelcomePopupText$ = joiningUser$.pipe(
                 // ↓ Your code here
-                debounceTime(30),
-                map(user => `User ${user.name} just joined!`),
                 // ↑ Your code here
             )
 
@@ -513,7 +488,6 @@ describe('piping', () => {
             let newRaffleMessage$: Observable<string>
 
             // ↓ Your code here
-            newRaffleMessage$ = interval(40).pipe(map(i => `Raffle ${i} begins!`))
             // ↑ Your code here
 
             expect(newRaffleMessage$.pipe(take(5))).toBeObservable(
@@ -538,7 +512,6 @@ describe('piping', () => {
             let gameOverMessage$: Observable<string>
 
             // ↓ Your code here
-            gameOverMessage$ = timer(100).pipe(map(() => 'Lobby closes. Good Bye!'))
             // ↑ Your code here
 
             expect(gameOverMessage$).toBeObservable(
@@ -559,8 +532,6 @@ describe('piping', () => {
             let raffleEndedMessage$: Observable<string>
 
             // ↓ Your code here
-            raffleEndedMessage$ = timer(100, 40).pipe(
-                map((val) => `Raffle ${val + 1} ended.`))
             // ↑ Your code here
 
             expect(raffleEndedMessage$.pipe(take(5))).toBeObservable(
@@ -592,7 +563,6 @@ describe('piping', () => {
             const resultingObservable$ = startingObservable$.pipe(
                 tap(() => mockFunction1()),
                 // ↓ Your code here
-                shareReplay(1),
                 // ↑ Your code here
             )
 

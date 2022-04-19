@@ -10,6 +10,11 @@ After checking out the project, first run `npm install` or `yarn install`. This 
 
 The exercises can be found at `src/exercises`. There will not be enough time during the workshop to complete all exercises per section. So just pick the ones you would like to work on first.
 
+When you start with an exercises, first check whether there is any `@ts-ignore` comment in the test. If so, remove it. This should help with the solutions since then you also get the help of type checking.
+When the test console output is a bit overwhelming (especially with all the failing tests at the beginning), you can proceed as follows:
+Change the `it` in the test you are working on to a `fit`. Then, jest will only execute the tests that are called via `fit`.
+If your test is green, you can leave it as fit (since it works and won't clutter the logs) and move on to the next test, change `it` to `fit` and make it green as well.
+
 If you are new to RxJS, it is advised to work on the exercises from top to bottom since they are ordered in increasing difficulty. If, however, you already have some experience with RxJS, feel free to choose which exercises you want to do.
 
 

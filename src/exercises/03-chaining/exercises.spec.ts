@@ -1,3 +1,5 @@
+// noinspection ES6UnusedImports
+
 import { cold, hot } from 'jest-marbles'
 import {
     catchError, combineLatest,
@@ -118,9 +120,9 @@ describe('chained observables', () => {
         it('01 switchMap: get observable with company of most current user', () => {
             let chainedObservable$: Observable<Company>
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => getCompany(user.code)),
                 // ↑ Your code here
             )
 
@@ -139,10 +141,9 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<string>
             // Hint: Remember that you can pipe on the inner observable as well!
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => getCompany(user.code).pipe(
-                    map(company => `${user.name} at ${company}`))),
                 // ↑ Your code here
             )
 
@@ -161,10 +162,9 @@ describe('chained observables', () => {
         it('03 take, switchMap: get status of first user', () => {
             let chainedObservable$: Observable<Status>
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                take(1),
-                switchMap(user => getStatus(user.code)),
                 // ↑ Your code here
             )
 
@@ -179,11 +179,9 @@ describe('chained observables', () => {
         it('04 take, switchMap: get first status of most current user', () => {
             let chainedObservable$: Observable<Status>
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => getStatus(user.code).pipe(
-                    take(1),
-                )),
                 // ↑ Your code here
             )
 
@@ -200,10 +198,9 @@ describe('chained observables', () => {
         it('05 take, switchMap: get first status that resolves', () => {
             let chainedObservable$: Observable<Status>
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => getStatus(user.code)),
-                take(1),
                 // ↑ Your code here
             )
 
@@ -219,11 +216,9 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Address[]>
             // Hint: Remember that you can chain multiple observables!
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                take(1),
-                switchMap(user => getCompany(user.code)),
-                switchMap(company => getAddresses(company)),
                 // ↑ Your code here
             )
 
@@ -237,12 +232,9 @@ describe('chained observables', () => {
         it('07 take, switchMap, map: get first address for first actual user', () => {
             let chainedObservable$: Observable<Address>
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                take(1),
-                switchMap(user => getCompany(user.code)),
-                switchMap(company => getAddresses(company)),
-                map(addresses => addresses[0]),
                 // ↑ Your code here
             )
 
@@ -257,13 +249,9 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<string>
             // Hint: Remember that you can pipe on inner observables as well!
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                take(1),
-                switchMap(user => getCompany(user.code)),
-                switchMap(company => getAddresses(company).pipe(
-                    map(addresses => addresses[0]),
-                    map(address => `${company}, ${address.line1}, ${address.line2}`))),
                 // ↑ Your code here
             )
 
@@ -280,14 +268,9 @@ describe('chained observables', () => {
             // Hint: To also keep the outer value after a switchMap, you can pipe on the inner observable of the
             // switchMap and change the inner value to a tuple of object that contains both (outer and inner) values.
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                take(1),
-                switchMap(user => getCompany(user.code).pipe(
-                    map(company => ([user, company] as const)))),
-                switchMap(([user, company]) => getAddresses(company).pipe(
-                    map(addresses => addresses[0]),
-                    map(address => `${user.name}, ${company}, ${address.line1}, ${address.line2}`))),
                 // ↑ Your code here
             )
 
@@ -303,10 +286,9 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Company>
             // Hint: Remember that catchError can go on the inner or on the outer observable! What is needed here?
 
+            // @ts-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
-                filter(user => !!user),
-                switchMap(user => getCompany(user.code).pipe(catchError(_ => of(undefined)))),
                 // ↑ Your code here
             )
 
@@ -323,10 +305,9 @@ describe('chained observables', () => {
         it('11 filter, switchMap, of: get observable with company of most current user (that is not eric; filter him out), null when user is null', () => {
             let chainedObservable$: Observable<Company>
 
+            // @ts-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
-                filter(user => user?.code !== eric.code),
-                switchMap(user => user ? getCompany(user.code) : of(null)),
                 // ↑ Your code here
             )
 
@@ -342,10 +323,9 @@ describe('chained observables', () => {
         it('12 switchMap, catchError, of: get observable with company of most current user, null when user is null, undefined on error', () => {
             let chainedObservable$: Observable<Company>
 
+            // @ts-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => user ? getCompany(user.code).pipe(
-                    catchError(_ => of(undefined))) : of(null)),
                 // ↑ Your code here
             )
 
@@ -361,13 +341,9 @@ describe('chained observables', () => {
         it('13 switchMap, catchError, of: get status of most current user, "undefined" when no user or erroneous user ', () => {
             let chainedObservable$: Observable<Status>
 
+            // @ts-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
-                switchMap(user => user
-                    ? getStatus(user.code).pipe(
-                        catchError(_ => of(undefined)))
-                    : of(undefined),
-                ),
                 // ↑ Your code here
             )
 
@@ -386,11 +362,9 @@ describe('chained observables', () => {
             // We call this function in the subscribe-callback of the observable.
             const updateLastLoggedInUser: (company: Company, userCode: string) => void = jest.fn()
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                concatMap(user => getCompany(user.code).pipe(
-                    map(company => ({company, user})),
-                )),
                 // ↑ Your code here
             )
             chainedObservable$.subscribe(
@@ -421,11 +395,9 @@ describe('chained observables', () => {
             // Call this function for each users' first status as soon as the user logs in and the corresponding status resolves
             const updateUserStatusInDb: (status: Status, userCode: string) => void = jest.fn()
 
+            // @ts-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
-                mergeMap(user => getStatus(user.code).pipe(
-                    take(1),
-                    map(status => ({status, user})))),
                 // ↑ Your code here
             )
             chainedObservable$.subscribe(
@@ -454,7 +426,6 @@ describe('chained observables', () => {
 
             chainedObservable$ = updateProfileClicks$.pipe(
                 // ↓ Your code here
-                exhaustMap(_ => updateProfile()),
                 // ↑ Your code here
             )
 
@@ -484,10 +455,6 @@ describe('chained observables', () => {
 
             displayErrorMessage$ = errors$.pipe(
                 // ↓ Your code here
-                switchMap(() => timer(50).pipe(
-                    map(() => false),
-                    startWith(true))),
-                startWith(false),
                 // ↑ Your code here
             )
 
@@ -507,7 +474,7 @@ describe('chained observables', () => {
             // Initially, no error message should be returned.
         })
 
-        it('takeOne with combineLatest and switchMap (revisited)', () => {
+        it('takeOne, combineLatest, switchMap: takeOne with combineLatest and switchMap (revisited)', () => {
             const outer$ = cold('--1')
             const obs1$ = cold('-a-b------c')
             const obs2$ = cold('-----(x|)')
@@ -518,26 +485,14 @@ describe('chained observables', () => {
 
             let expectedChained1$
             // ↓ Your code here
-            expectedChained1$ = cold(
-                '-------u',
-                {u: ['a', 'x']},
-            )
             // ↑ Your code here
 
             let expectedChained2$
             // ↓ Your code here
-            expectedChained2$ = cold(
-                '-------u',
-                {u: ['b', 'x']},
-            )
             // ↑ Your code here
 
             let expectedChained3$
             // ↓ Your code here
-            expectedChained3$ = cold(
-                '-------(u|)',
-                {u: ['b', 'x']},
-            )
             // ↑ Your code here
 
             expect(chained1$).toBeObservable(expectedChained1$)

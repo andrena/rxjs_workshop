@@ -41,7 +41,7 @@ export function getCurrentUser(): Observable<User> {
 
 
 export function getInactiveUsers(): Observable<User> {
-    return cold('---g-----f|', {
+    return cold('----g-----f|', {
         f: frida,
         g: gregor,
     })

@@ -1,4 +1,6 @@
-import { cold, hot } from 'jest-marbles'
+// noinspection ES6UnusedImports
+
+import { cold, hot, ObservableWithSubscriptions } from 'jest-marbles'
 import {
     combineLatest,
     concat,
@@ -8,6 +10,7 @@ import {
     forkJoin,
     map,
     merge,
+    Observable,
     partition,
     race,
     take,
@@ -15,6 +18,7 @@ import {
 } from 'rxjs'
 import { created, verified } from '../testData/data/status'
 import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../testData/data/users'
+import { Status, User } from '../testData/dataModel'
 import {
     getActiveCart,
     getActiveLanguage,
@@ -36,10 +40,12 @@ describe('demo app', () => {
             // Try to explain the above behaviour.
         })
 
-        it('retrieve the users and users with the error code into their on observable', () => {
+        it('partition: retrieve the users and users with the error code into their on observable', () => {
+
+            let users: Observable<User>
+            let errorCases: Observable<User | null>
 
             // ↓ Your code here
-            const [users, errorCases] = partition(getCurrentUser(), (user => user ? user.code !== eric.code : false))
             // ↑ Your code here
 
             expect(users).toBeObservable(cold('---a----b--dc-----ab---h',
@@ -50,66 +56,66 @@ describe('demo app', () => {
             // Split the getCurrentUser$ observable into two observables one with the errorCases (eric and null) and one with the correct users
         })
 
-        it('concat with order', () => {
+        it('concat: concat with order', () => {
 
             const combined$ = concat(getStatus(charlotte.code), getStatus(albert.code), getStatus(berta.code))
 
+            let expectedResult$: ObservableWithSubscriptions
+
             // ↓ Your code here
-            expect(combined$).toBeObservable(cold('--v-c--v-c|',
-                {c: created, v: verified}))
             // ↑ Your code here
 
+            expect(combined$).toBeObservable(expectedResult$)
+
             // Now lets combine the above observables, which outcome would you expect.
+            // Assign the correct value (cold(...)) to expectedResult$
         })
 
-        it('concat with hot', () => {
+        it('concat: concat with hot', () => {
 
             const combined$ = concat(getCurrentUser(), getActiveCart())
 
+            let expectedResult$: ObservableWithSubscriptions
+
             // ↓ Your code here
-            expect(combined$).toBeObservable(hot('0--a----b--dc--e--ab---h',
-                {a: albert, b: berta, c: charlotte, d: dora, e: eric, h: herta, 0: null}))
             // ↑ Your code here
+
+            expect(combined$).toBeObservable(expectedResult$)
 
             // Concatenate two hot observables and try to predict the outcome
+            // Assign the correct value (cold(...)) to expectedResult$
+
         })
 
-        it('combine current and inactive users and give all a discount', () => {
+        it('merge, distinct, filter, map: combine current and inactive users and give all a discount', () => {
+            const applyDiscount = jest.fn()
 
-            const discountForUser = jest.fn()
+            let userCodesToDiscount$: Observable<string>
 
             // ↓ Your code here
-            const combined$ = merge(getInactiveUsers(), getCurrentUser())
-            const usersWithDiscount$ = combined$.pipe(
-                distinct(),
-                filter(user => user?.code !== eric.code),
-                tap(user => discountForUser(user?.code)),
-            )
             // ↑ Your code here
 
-            expect(usersWithDiscount$).toBeObservable(cold('0--(ag)-bf-dc----------h', {
-                a: albert, b: berta, c: charlotte, d: dora, e: eric, f: frida, g: gregor, h: herta, 0: null,
-            }))
+            userCodesToDiscount$.subscribe(user => applyDiscount(user))
 
             //Extra assert that the function was called in the correct order
-            // ↓ Your code here
-            expect(combined$).toSatisfyOnFlush(() => {
-                expect(discountForUser).toHaveBeenNthCalledWith(1, undefined)
-                expect(discountForUser).toHaveBeenNthCalledWith(2, albert.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(3, gregor.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(4, berta.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(5, frida.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(6, dora.code)
-                expect(discountForUser).toHaveBeenNthCalledWith(7, charlotte.code)
+            expect(userCodesToDiscount$).toSatisfyOnFlush(() => {
+                expect(applyDiscount).toHaveBeenNthCalledWith(1, albert.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(2, gregor.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(3, berta.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(4, frida.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(5, dora.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(6, charlotte.code)
+                expect(applyDiscount).toHaveBeenNthCalledWith(7, eric.code)
             })
-            // ↑ Your code here
 
-            // In this case we want to give a discount to all users. For this we have the function discountForUser(String code)
-            // The function excepts the Code that each user has. Make sure that eric does not get a discount.
-            // Make sure that every user gets only one discount. The order is not important.
+            // In this case we want to give a discount to all users. For this we have the function applyDiscount(String code)
+            // The function excepts the Code that each user has. Filter out the null user!
+            // Make sure that every user gets only one discount. The discounts should be applied in the same order
+            // in which the users are emitted in getInactiveUsers and getCurrentUser.
+            // Assign the correct observable to userCodesToDiscount$ and add operators to its pipe to satisfy the requirements.
         })
 
-        it('for the finalWorkflow use the server with faster response time', () => {
+        it('race: for the finalWorkflow use the server with faster response time', () => {
 
             const ping = (serverId: number) => serverId === 1 ? cold('-(a|)') : cold('----(1|)')
             const addDiscounts = (serverId: number) => serverId === 1 ? cold('----(b|)') : cold('--(2|)')
@@ -119,27 +125,30 @@ describe('demo app', () => {
             const server1Workflow = concat(ping(1), addDiscounts(1), addVat(1), calcPrices(1))
             const server2Workflow = concat(ping(2), addDiscounts(2), addVat(2), calcPrices(2))
 
+            let finalWorkflow: Observable<any>
             // ↓ Your code here
-            let finalWorkflow = race([server1Workflow, server2Workflow])
             // ↑ Your code here
 
             expect(finalWorkflow).toBeObservable(cold('-a---bc-(d|)'))
 
-            // We have a workflow which includes ping, addDiscount, addVat and calcPrices. The final Workflow should
-            // only query the faster one of the two servers.
+            // We have two servers, 1 and 2. Each can be used to add a discount, add vat and calculate prices.
+            // The parameter of each method determines on what server this method is executed.
+            // We can also ping a server to see which is faster at the moment.
+            // If one action is done on one server, the other actions have to be done on the same server to avoid a data mismatch.
+            //
+            // For each server, we created a workflow which first pings the server, than addDiscount, addVat and calcPrices.
+            // The final Workflow should start the workflow on both servers but execute everything after the ping only on the
+            // fastest server (the one that answered our ping first).
         })
 
-        it('greet the current user in the currently selected language', () => {
+        it('combineLatest, filter, map, distinctUntilChanged: greet the current user in the currently selected language', () => {
+
+            let greetingMessage$: Observable<string>
 
             // ↓ Your code here
-            const observable$ = combineLatest([getCurrentUser(), getActiveLanguage()]).pipe(
-                filter(([user, lang]) => !!user && !!lang),
-                map(([user, lang]) => `${getHelloInLanguage(lang)} ${user.name}`),
-                distinctUntilChanged(),
-            )
             // ↑ Your code here
 
-            expect(observable$).toBeObservable(hot('---a--b-c--defeh-ij(kl)m', {
+            expect(greetingMessage$).toBeObservable(hot('---a--b-c--defeh-ij(kl)m', {
                 a: 'Hello Albert Ahörnchen',
                 b: 'Hallo Albert Ahörnchen',
                 c: 'Hallo Berta Bhörnchen',
@@ -155,11 +164,13 @@ describe('demo app', () => {
                 m: 'Hello Herta Hertenstein',
             }))
 
-            // Print out a greeting when a new user connects and when the current user changes the language. A user should not be greeted
-            // twice in the same language.
+            // Print out a greeting whenever a new user connects and whenever the current user changes the language.
+            // Filter out null users and null languages
+            // A user should not be greeted twice in the same language (only if he selected a different language in between).
+            // Use the method getHelloInLanguage(language) to get 'Hello' in the given language.
         })
 
-        it('takeOne with combineLatest', () => {
+        it('takeOne, combineLatest: takeOne with combineLatest', () => {
             const obs1$ = cold('-a-b------c')
             const obs2$ = cold('-----(x|)')
 
@@ -168,18 +179,10 @@ describe('demo app', () => {
 
             let expectedCombined1$
             // ↓ Your code here
-            expectedCombined1$ = cold(
-                '-----(u|)',
-                {u: ['a', 'x']},
-            )
             // ↑ Your code here
 
             let expectedCombined2$
             // ↓ Your code here
-            expectedCombined2$ = cold(
-                '-----(u|)',
-                {u: ['b', 'x']},
-            )
             // ↑ Your code here
 
             expect(combined1$).toBeObservable(expectedCombined1$)
