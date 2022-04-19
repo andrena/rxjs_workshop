@@ -1,6 +1,6 @@
 import { cold, hot } from 'jest-marbles'
 import {
-    catchError,
+    catchError, combineLatest,
     concatMap,
     exhaustMap,
     filter,
@@ -505,6 +505,47 @@ describe('chained observables', () => {
             // The error message should be displayed for 50 milliseconds and then disappear. If during this time, a new error
             // happens, the timer should reset.
             // Initially, no error message should be returned.
+        })
+
+        it('takeOne with combineLatest and switchMap (revisited)', () => {
+            const outer$ = cold('--1')
+            const obs1$ = cold('-a-b------c')
+            const obs2$ = cold('-----(x|)')
+
+            const chained1$ = outer$.pipe(switchMap(() => combineLatest([obs1$.pipe(take(1)), obs2$])))
+            const chained2$ = outer$.pipe(switchMap(() => combineLatest([obs1$, obs2$]).pipe(take(1))))
+            const chained3$ = outer$.pipe(switchMap(() => combineLatest([obs1$, obs2$])), take(1))
+
+            let expectedChained1$
+            // ↓ Your code here
+            expectedChained1$ = cold(
+                '-------u',
+                {u: ['a', 'x']},
+            )
+            // ↑ Your code here
+
+            let expectedChained2$
+            // ↓ Your code here
+            expectedChained2$ = cold(
+                '-------u',
+                {u: ['b', 'x']},
+            )
+            // ↑ Your code here
+
+            let expectedChained3$
+            // ↓ Your code here
+            expectedChained3$ = cold(
+                '-------(u|)',
+                {u: ['b', 'x']},
+            )
+            // ↑ Your code here
+
+            expect(chained1$).toBeObservable(expectedChained1$)
+            expect(chained2$).toBeObservable(expectedChained2$)
+            expect(chained3$).toBeObservable(expectedChained3$)
+
+            // Similar as in the combining exercise, there are three places to place a take(1) to achieve similar things.
+            // Assign values to the expectedChained$-Variables to match the actual results
         })
     })
 })

@@ -12,11 +12,11 @@ import {
     of,
     pairwise,
     reduce,
-    scan,
+    scan, shareReplay,
     skip,
     startWith,
     take,
-    takeUntil,
+    takeUntil, tap,
 } from 'rxjs'
 import { english, french, german } from '../testData/data/languages'
 import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../testData/data/users'
@@ -586,6 +586,31 @@ describe('piping', () => {
             // the actual 'timer', it can be tested better.
 
             // Bonus: Can you implement this method without 'timer' but using 'interval' and 'delay' instead?
+        })
+
+        it('shareReplay: only call cold observable once, keep buffer', () => {
+            const mockFunction1 = jest.fn()
+            const mockFunction2 = jest.fn()
+            const startingObservable$ = cold('-a--b--')
+
+            const resultingObservable$ = startingObservable$.pipe(
+                tap(() => mockFunction1()),
+                // ↓ Your code here
+                shareReplay(1),
+                // ↑ Your code here
+            )
+
+            resultingObservable$.subscribe(() => mockFunction2())
+            resultingObservable$.subscribe(() => mockFunction2())
+
+            expect(startingObservable$).toSatisfyOnFlush(() => {
+                expect(mockFunction1).toHaveBeenCalledTimes(2)
+                expect(mockFunction2).toHaveBeenCalledTimes(4)
+            })
+
+            // We want to subscribe to the resultingObservable$ multiple times to receive the emitted values on multiple places.
+            // However, we do not want the calculations for this observable (in this case the "tap") to be executed each
+            // time we subscribe but we want to buffer the result instead and share it across the subscribers.
         })
     })
 })

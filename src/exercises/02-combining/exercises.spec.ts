@@ -1,5 +1,20 @@
 import { cold, hot } from 'jest-marbles'
-import { combineLatest, concat, distinct, distinctUntilChanged, filter, forkJoin, map, merge, partition, race, tap } from 'rxjs'
+import {
+    combineLatest,
+    concat,
+    distinct,
+    distinctUntilChanged,
+    filter,
+    forkJoin,
+    map,
+    merge,
+    partition,
+    race,
+    take,
+    tap,
+} from 'rxjs'
+import { created, verified } from '../testData/data/status'
+import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../testData/data/users'
 import {
     getActiveCart,
     getActiveLanguage,
@@ -8,8 +23,6 @@ import {
     getInactiveUsers,
     getStatus,
 } from '../testData/providerFunctions'
-import { created, verified } from '../testData/data/status'
-import { albert, berta, charlotte, dora, eric, frida, gregor, herta } from '../testData/data/users'
 
 describe('demo app', () => {
     describe('combining', () => {
@@ -51,7 +64,7 @@ describe('demo app', () => {
 
         it('concat with hot', () => {
 
-            const combined$ = concat(getCurrentUser(), getActiveCart());
+            const combined$ = concat(getCurrentUser(), getActiveCart())
 
             // ↓ Your code here
             expect(combined$).toBeObservable(hot('0--a----b--dc--e--ab---h',
@@ -122,8 +135,8 @@ describe('demo app', () => {
             const observable$ = combineLatest([getCurrentUser(), getActiveLanguage()]).pipe(
                 filter(([user, lang]) => !!user && !!lang),
                 map(([user, lang]) => `${getHelloInLanguage(lang)} ${user.name}`),
-                distinctUntilChanged()
-            );
+                distinctUntilChanged(),
+            )
             // ↑ Your code here
 
             expect(observable$).toBeObservable(hot('---a--b-c--defeh-ij(kl)m', {
@@ -139,11 +152,43 @@ describe('demo app', () => {
                 j: 'Bonjour Albert Ahörnchen',
                 k: 'Bonjour Berta Bhörnchen',
                 l: 'Hello Berta Bhörnchen',
-                m: 'Hello Herta Hertenstein'
-            }));
+                m: 'Hello Herta Hertenstein',
+            }))
 
             // Print out a greeting when a new user connects and when the current user changes the language. A user should not be greeted
             // twice in the same language.
+        })
+
+        it('takeOne with combineLatest', () => {
+            const obs1$ = cold('-a-b------c')
+            const obs2$ = cold('-----(x|)')
+
+            const combined1$ = combineLatest([obs1$.pipe(take(1)), obs2$])
+            const combined2$ = combineLatest([obs1$, obs2$]).pipe(take(1))
+
+            let expectedCombined1$
+            // ↓ Your code here
+            expectedCombined1$ = cold(
+                '-----(u|)',
+                {u: ['a', 'x']},
+            )
+            // ↑ Your code here
+
+            let expectedCombined2$
+            // ↓ Your code here
+            expectedCombined2$ = cold(
+                '-----(u|)',
+                {u: ['b', 'x']},
+            )
+            // ↑ Your code here
+
+            expect(combined1$).toBeObservable(expectedCombined1$)
+            expect(combined2$).toBeObservable(expectedCombined2$)
+
+            // We combine two observables. One of them emits a single value, the other one emits multiple ones.
+            // But we only want to get one combination of values, so we use take(1).
+            // There are two places where take(1) could go in this construct. Can you find the difference in the outcome?
+            // Assign expectedCombined1$ and expectedCombined2$ to match the correct result.
         })
     })
 })
