@@ -1,6 +1,6 @@
 // noinspection ES6UnusedImports
 
-import { cold, hot } from 'jest-marbles'
+import { cold, hot, ObservableWithSubscriptions } from 'jest-marbles'
 import {
     bufferCount,
     catchError,
@@ -14,11 +14,13 @@ import {
     of,
     pairwise,
     reduce,
-    scan, shareReplay,
+    scan,
+    shareReplay,
     skip,
     startWith,
     take,
-    takeUntil, tap,
+    takeUntil,
+    tap,
 } from 'rxjs'
 import { english, french, german } from '../testData/data/languages'
 import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../testData/data/users'
@@ -230,10 +232,12 @@ describe('piping', () => {
                     catchError((_) => of(gast)),
                 )
 
-                // @ts-ignore
+                let expectedObservable$: ObservableWithSubscriptions
+                // ↓ Your code here
+                // ↑ Your code here
+
                 expect(user$).toBeObservable(
-                    // ↓ Your code here
-                    // ↑ Your code here
+                    expectedObservable$,
                 )
 
                 // When an error occurs we again return the user gast. What should be the expected outcome of the example above.
