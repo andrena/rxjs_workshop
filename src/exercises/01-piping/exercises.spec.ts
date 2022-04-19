@@ -30,9 +30,7 @@ describe('piping', () => {
 
         it('create an observable with single emit', () => {
 
-            // ↓ Your code here
             const observable$ = of(numbers)
-            // ↑ Your code here
 
             expect(observable$).toBeObservable(cold('(a|)', {
                 a: numbers,
@@ -43,9 +41,7 @@ describe('piping', () => {
 
         it('create an observable with multiple emits', () => {
 
-            // ↓ Your code here
             const observable$ = from(numbers)
-            // ↑ Your code here
 
             expect(observable$).toBeObservable(cold('(abcdef|)', {
                 a: 1, b: 2, c: 3, d: 5, e: 8, f: 13,
