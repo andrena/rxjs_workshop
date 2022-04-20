@@ -4,6 +4,17 @@ Held by Marco Sieben and Fabian Stelzig (both andrena objects ag) at the Entwick
 
 Materials are free to use for private education. Feel free to copy it to your machines as long as you keep the reference to the authors.
 
+## This project on github
+
+Here you can find this project on github together with a solutions branch: https://github.com/RxJSWorkshop/RxJSWorkshop
+
+## Helpful links
+
+RxJS Operators: https://rxjs.dev/guide/operators
+RxJS Animated: https://indepth.dev/reference/rxjs
+RxJS Animated: https://indepth.dev/posts/1114/learn-to-combine-rxjs-sequences-with-super-intuitive-interactive-diagrams
+RxJS interactive Marbles: https://rxmarbles.com/
+
 ## First steps
 
 After checking out the project, first run `npm install` or `yarn install`. This should be done automatically if you use this project in Stackblitz.
