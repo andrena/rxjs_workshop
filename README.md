@@ -1,6 +1,8 @@
 # RxJS Workshop
 
-Held by Marco Sieben and Fabian Stelzig (both andrena objects ag) at the Entwicklertage Karlsruhe on Mai 17th, 2022. 
+Held by Marco Sieben and Fabian Stelzig (both andrena objects ag) at the Entwicklertage Karlsruhe on Mai 17th, 2022.
+
+Materials are free to use for private education. Feel free to copy it to your machines as long as you keep the reference to the authors.
 
 ## First steps
 
