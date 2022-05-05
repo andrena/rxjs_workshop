@@ -1,55 +1,73 @@
-## Einleitung / Piping
+# TODO
 
-* Bild für den Anfang
-* Bild mit der Stackblitz URL
-* Speichern erwähnen
-* Beim Speichen overwrite Remote Changes erwähnen
-* testWatch
+- [M] Move Project to andrena organization in github and update links
+- [M] Fix formatting in master branch (comments and ()) (maybe configure stackblitz)
+- [F] testWatch (watch:piping)
+- [F] Eric raus
+- [M] shortcuts für stackblitz
+- [F] Am anfang aufs Repo verlinken
+- [B] Pro Teil (P/C/C) eine Aufgabe raussuchen (evtl. eine mit mehr Praxisbezug), die dann am Ende des Abschnittes gemeinsam gelöst wird
+- [B] Schriftgröße bei der Präsentation groß - herausfinden
+- [F] Bild für den Anfang mit Stackblitz URL, github URL, Doku
+- [F] Speichern zur Folie hinzufügen
+  - Beim Speichen overwrite Remote Changes erwähnen
+- [F] Endfolie mit Kontaktdaten für Fragen (und Dankeschön)
+- [F] Marble-Strings als HTML zur Verfügung stellen, herausfinden, wie man das in Stackblitz anzeigen lässt
+- [F] Foliensatz ausbessern Datum
+
 
 ## Piping Übungen
 
-* TakeUntil Testnamen anpassen
-* Auf Funktionen Eingehen getCurrentUser ...
-* Piping Test Take(1) Klammer falsch
-* getHelloInLanguage überall erwähnen, wo benötigt
+- [M] TakeUntil Testnamen anpassen 
+- [F] catchError bei Piping nochmal die Beschreibung überarbeiten.
+- [F] getHelloInLanguage überall erwähnen, wo benötigt
 
 ## Marbles Syntax
 
-* Hot Raus
-* Mehr mit der Maus zeigen
-* Code schon vorbereiten
-* Diagramm mit merge oder combineLatest
-* Partition nach hinten
-* forkJoin nach hinten
-* Eric raus
+- [F] Code schon vorbereiten
 
-## Chaining
+## Combining
+- [F] Partition nach hinten
+- [F] forkJoin nach hinten
+
+# To Think
+
+- Schriftgröße bei der Präsentation groß
+
+## Piping Übungen
+- Am Anfang erwähnen, dass die Übung in der Zeit nicht machbar sind
+- Zu Beginn: Kurz die Marble-Syntax erklären
+- Readme erwähnen
+- Auf Funktionen Eingehen getCurrentUser, getHelloInLanguage, ...
+
+## Marbles
+- marbles unabhängig von rxjs und typescript
+- hot Raus
+- Mehr mit der Maus zeigen
+- Evtl. Erklärung zu SatisfyOnFlush raus
+- Problem mit gleichzeitiger Emission: Strings zeigen, ruhig auch mit Händen und Füßen
 
 
-## Feedback
+## Combining
+- Erwähnen, dass das nicht in der Pipe stattfindet
+- Diagramm mit merge oder combineLatest
 
-* andrena github Seite 
-* shortcuts für stackblitz
-* Am anfang aufs Repo verlinken
+# To Einpacken
+- Tastatur
+
+
+
+
+
+
+## Ignoriertes Feedback
+
 * Einstieg zu plötzlich (Idee historische Observables)
-* Evolution der 
-* Welche completen welche nicht.
-* marbles unabhängig von rxjs und typescript
-* gemeinsames lösen
-* eine Übung nochmal gemeinsam lösen z.B die Dritte
-* catchError bei Piping nochmal die Beschreibung überarbeiten.
-* Schriftgröße bei der Präsentation groß
-* Matrbles am Anfang 3 dafür vorher einführen. Grobe Vorstellung
-* doku vor der ersten Übung
-* Am Ende Folie für Kontakte und Fragen 
-* Am Anfang erwähnen, dass die Übung in der Zeit nicht machbar sind
-* Bei der Präsentation die Marble Strings mit hinzufügen
-* Bei Combining darauf eingehen, dass es nicht in der Pipe stattfindet
+  * Evolution der Async-Möglichkeiten 
 
 Fabian
 * bei Präsentieren die Hand vom Mund weg.
 * nicht auf Laptop sondern Folien zeigen
-* Foliensatz ausbessern Datum
 * weniger tippen
 
 
