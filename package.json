@@ -20,6 +20,9 @@
     "test": "jest",
     "test:piping": "jest exercises/01-piping",
     "test:combining": "jest exercises/02-combining",
-    "test:chaining": "jest exercises/03-chaining"
+    "test:chaining": "jest exercises/03-chaining",
+    "watch:piping": "jest --watch exercises/01-piping",
+    "watch:combining": "jest --watch exercises/02-combining",
+    "watch:chaining": "jest --watch exercises/03-chaining"
   }
 }

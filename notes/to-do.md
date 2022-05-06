@@ -2,7 +2,7 @@
 
 - [M] Move Project to andrena organization in github and update links
 - [M] Fix formatting in master branch (comments and ()) (maybe configure stackblitz)
-- [F] testWatch (watch:piping)
+- [x] testWatch (watch:piping)
 - [F] Eric raus
 - [M] shortcuts für stackblitz
 - [F] Am anfang aufs Repo verlinken
