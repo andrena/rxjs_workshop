@@ -31,31 +31,6 @@ import {
 describe('demo app', () => {
     describe('combining', () => {
 
-        it('combine the last current user and the last cart', () => {
-
-            const combined$ = forkJoin([getCurrentUser(), getActiveCart()])
-
-            expect(combined$).toBeObservable(cold(''))
-
-            // Try to explain the above behaviour.
-        })
-
-        it('partition: retrieve the users and users with the error code into their on observable', () => {
-
-            let users: Observable<User>
-            let errorCases: Observable<User | null>
-
-            // ↓ Your code here
-            // ↑ Your code here
-
-            expect(users).toBeObservable(cold('---a----b--dc-----ab---h',
-                {a: albert, b: berta, c: charlotte, d: dora, h: herta}))
-            expect(errorCases).toBeObservable(cold('0--------------e----',
-                {e: eric, 0: null}))
-
-            // Split the getCurrentUser$ observable into two observables one with the errorCases (eric and null) and one with the correct users
-        })
-
         it('concat: concat with order', () => {
 
             const combined$ = concat(getStatus(charlotte.code), getStatus(albert.code), getStatus(berta.code))
@@ -85,6 +60,59 @@ describe('demo app', () => {
             // Concatenate two hot observables and try to predict the outcome
             // Assign the correct value (cold(...)) to expectedResult$
 
+        })
+
+        it('combine the last current user and the last cart', () => {
+
+            const combined$ = forkJoin([getCurrentUser(), getActiveCart()])
+
+            expect(combined$).toBeObservable(cold(''))
+
+            // Try to explain the above behaviour.
+        })
+
+        it('combineLatest, filter, map, distinctUntilChanged, getActiveLanguage, getHelloInLanguage: greet the current user in the currently selected language', () => {
+
+            let greetingMessage$: Observable<string>
+
+            // ↓ Your code here
+            // ↑ Your code here
+
+            expect(greetingMessage$).toBeObservable(hot('---a--b-c--defeg-hi(jk)l', {
+                a: `Hello ${albert.name}`,
+                b: `Hallo ${albert.name}`,
+                c: `Hallo ${berta.name}`,
+                d: `Hallo ${dora.name}`,
+                e: `Hallo ${charlotte.name}`,
+                f: `Hello ${charlotte.name}`,
+                g: `Hallo ${eric.name}`,
+                h: `Bonjour ${eric.name}`,
+                i: `Bonjour ${albert.name}`,
+                j: `Hello ${albert.name}`,
+                k: `Hello ${berta.name}`,
+                l: `Hello ${herta.name}`,
+            }))
+
+            // Print out a greeting whenever a new user connects and whenever the current user changes the language.
+            // Filter out null users and null languages
+            // A user should not be greeted twice in the same language (only if he selected a different language in between).
+            // Use the method getHelloInLanguage(language) to get 'Hello' in the given language.
+        })
+
+        it('partition:  split the observable into the user value and null values', () => {
+
+            let users: Observable<User>
+            let errorCases: Observable<User | null>
+
+            // ↓ Your code here
+            // ↑ Your code here
+
+            expect(users).toBeObservable(cold('---a----b--dc-----ab---h',
+                {a: albert, b: berta, c: charlotte, d: dora, h: herta}))
+            expect(errorCases).toBeObservable(cold('0-------------------',
+                {0: null}))
+
+            // Split the getCurrentUser$ observable into two observables one with the null cases and one with the correct users.
         })
 
         it('merge, distinct, filter, map: combine current and inactive users and give all a discount', () => {
@@ -139,35 +167,6 @@ describe('demo app', () => {
             // For each server, we created a workflow which first pings the server, than addDiscount, addVat and calcPrices.
             // The final Workflow should start the workflow on both servers but execute everything after the ping only on the
             // fastest server (the one that answered our ping first).
-        })
-
-        it('combineLatest, filter, map, distinctUntilChanged: greet the current user in the currently selected language', () => {
-
-            let greetingMessage$: Observable<string>
-
-            // ↓ Your code here
-            // ↑ Your code here
-
-            expect(greetingMessage$).toBeObservable(hot('---a--b-c--defeh-ij(kl)m', {
-                a: 'Hello Albert Ahörnchen',
-                b: 'Hallo Albert Ahörnchen',
-                c: 'Hallo Berta Bhörnchen',
-                d: 'Hallo Dora the Explorer',
-                e: 'Hallo Charlotte Chicoree',
-                f: 'Hello Charlotte Chicoree',
-                g: 'Hello Charlotte Chicoree',
-                h: 'Hallo Eric Erroruser',
-                i: 'Bonjour Eric Erroruser',
-                j: 'Bonjour Albert Ahörnchen',
-                k: 'Bonjour Berta Bhörnchen',
-                l: 'Hello Berta Bhörnchen',
-                m: 'Hello Herta Hertenstein',
-            }))
-
-            // Print out a greeting whenever a new user connects and whenever the current user changes the language.
-            // Filter out null users and null languages
-            // A user should not be greeted twice in the same language (only if he selected a different language in between).
-            // Use the method getHelloInLanguage(language) to get 'Hello' in the given language.
         })
 
         it('takeOne, combineLatest: takeOne with combineLatest', () => {

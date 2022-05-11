@@ -26,7 +26,7 @@ export const dora: User = {
 
 export const eric: User = {
     code: 'e_user',
-    name: 'Eric Erroruser',
+    name: 'Eric Ericson',
     age: 38
 }
 
@@ -49,7 +49,7 @@ export const herta: User = {
     age: 54
 }
 
-export const gast: User = {
+export const guest: User = {
     code: 'gast',
     name: 'Gastuser',
     age: NaN

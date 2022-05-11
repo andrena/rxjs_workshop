@@ -23,7 +23,7 @@ import {
     tap,
 } from 'rxjs'
 import { english, french, german } from '../testData/data/languages'
-import { albert, berta, charlotte, dora, eric, frida, gast, gregor, herta } from '../testData/data/users'
+import { albert, berta, charlotte, dora, eric, frida, guest, gregor, herta } from '../testData/data/users'
 import { Language, User } from '../testData/dataModel'
 import { getActiveLanguage, getHelloInLanguage } from '../testData/providerFunctions'
 import { debounceTime, delay, interval, timer } from '../testHelper'
@@ -190,7 +190,7 @@ describe('piping', () => {
             // Create an observable that emits the joiningUsers as long as the lobby is open.
         })
 
-        it('distinctUntilChanged, map: return hello message on language change', () => {
+        it('distinctUntilChanged, map, getHelloInLanguage: return hello message on language change', () => {
 
             const helloMessage$: Observable<string> = getActiveLanguage().pipe(
                 // ↓ Your code here
@@ -201,8 +201,8 @@ describe('piping', () => {
                 e: 'Hello', g: 'Hallo', f: 'Bonjour',
             }))
 
-            // Return the hello message on language changes. When the users selects the currently active language again no message should be
-            // returned.
+            // Return the hello message on language changes. To get the greeting in a language use getHelloInLanguage.
+            // When the users selects the currently active language again no message should be returned.
         })
 
         describe('handle errors', () => {
@@ -213,7 +213,7 @@ describe('piping', () => {
                 usersWithError$ = hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor})
             })
 
-            it('catchError, map: return the user gast when an error occurs and return the codes of the users in the observable ', () => {
+            it('catchError, map: return the user guest when an error occurs and return the codes of the users in the observable ', () => {
                 // @ts-ignore
                 const user$: Observable<string> = usersWithError$.pipe(
                     // ↓ Your code here
@@ -221,15 +221,16 @@ describe('piping', () => {
                 )
 
                 expect(user$).toBeObservable(cold('--a---b-c-(d|)',
-                    {a: albert.code, b: berta.code, c: charlotte.code, d: gast.code}))
+                    {a: albert.code, b: berta.code, c: charlotte.code, d: guest.code}))
 
-                // When an error occurs return an observable of the user gast. Return the code of every user in the observable.
+                // Return the user.code of a user.
+                // When an error occurs return an observable of the user guest. Keep in mind where you place the catchError Operator
             })
 
             it('catchError, map: experiment what happens when you turn things around', () => {
                 const user$ = usersWithError$.pipe(
                     map(user => user?.code),
-                    catchError((_) => of(gast)),
+                    catchError((_) => of(guest)),
                 )
 
                 let expectedObservable$: ObservableWithSubscriptions
