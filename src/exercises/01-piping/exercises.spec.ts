@@ -80,6 +80,7 @@ describe('piping', () => {
 
         it('map: get user names', () => {
             // @ts-ignore
+            // prettier-ignore
             const activeUserName$: Observable<string> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -101,6 +102,7 @@ describe('piping', () => {
         })
 
         it('take: first value', () => {
+            // prettier-ignore
             const firstUser: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -114,6 +116,7 @@ describe('piping', () => {
         })
 
         it('startWith: the default language should be german at the start', () => {
+            // prettier-ignore
             const activeLangWithDefault$: Observable<Language> = getActiveLanguage().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -129,6 +132,7 @@ describe('piping', () => {
         })
 
         it('first: retrieve first user that is younger than 18', () => {
+            // prettier-ignore
             const firstActualUser$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -142,6 +146,7 @@ describe('piping', () => {
         })
 
         it('skip: skip first value', () => {
+            // prettier-ignore
             const fromSecondUser$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -155,6 +160,7 @@ describe('piping', () => {
 
         it('filter, map: return code of adolescent users', () => {
             // @ts-ignore
+            // prettier-ignore
             const adultUserCode$: Observable<string> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -176,6 +182,7 @@ describe('piping', () => {
             // Only emit users as long as this observable has not emitted
             const lobbyClosed$ = cold('--------(x|)')
 
+            // prettier-ignore
             const newUserInLobby$: Observable<User> = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -192,6 +199,7 @@ describe('piping', () => {
 
         it('distinctUntilChanged, map, getHelloInLanguage: return hello message on language change', () => {
 
+            // prettier-ignore
             const helloMessage$: Observable<string> = getActiveLanguage().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -215,6 +223,7 @@ describe('piping', () => {
 
             it('catchError, map: return the user guest when an error occurs and return the codes of the users in the observable ', () => {
                 // @ts-ignore
+                // prettier-ignore
                 const user$: Observable<string> = usersWithError$.pipe(
                     // ↓ Your code here
                     // ↑ Your code here
@@ -234,6 +243,7 @@ describe('piping', () => {
                 )
 
                 let expectedObservable$: ObservableWithSubscriptions
+
                 // ↓ Your code here
                 // ↑ Your code here
 
@@ -250,6 +260,7 @@ describe('piping', () => {
             let maxAge$: Observable<number>
 
             // @ts-ignore
+            // prettier-ignore
             maxAge$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -270,6 +281,7 @@ describe('piping', () => {
             let users$ = joiningUser$
             // users$ = hot('--a--b|', {a: albert, b: berta})
             // @ts-ignore
+            // prettier-ignore
             averageAge$ = users$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -290,12 +302,14 @@ describe('piping', () => {
             let averageAge$: Observable<number>
 
             // @ts-ignore
+            // prettier-ignore
             maxAge$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
             )
 
             // @ts-ignore
+            // prettier-ignore
             averageAge$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -330,6 +344,7 @@ describe('piping', () => {
             let userChangeMessage$: Observable<string>
 
             // @ts-ignore
+            // prettier-ignore
             userChangeMessage$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -356,6 +371,7 @@ describe('piping', () => {
             let userChangeMessage$: Observable<string>
 
             // @ts-ignore
+            // prettier-ignore
             userChangeMessage$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -381,6 +397,7 @@ describe('piping', () => {
             let groups$: Observable<User[]>
 
             // @ts-ignore
+            // prettier-ignore
             groups$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -405,6 +422,7 @@ describe('piping', () => {
             let teams$: Observable<UserWithNeighbors>
 
             // @ts-ignore
+            // prettier-ignore
             teams$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -435,6 +453,7 @@ describe('piping', () => {
             let userWelcomePopupText$: Observable<string>
 
             // @ts-ignore
+            // prettier-ignore
             userWelcomePopupText$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -465,6 +484,7 @@ describe('piping', () => {
             let userWelcomePopupText$: Observable<string>
 
             // @ts-ignore
+            // prettier-ignore
             userWelcomePopupText$ = joiningUser$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -565,6 +585,7 @@ describe('piping', () => {
             const mockFunction2 = jest.fn()
             const startingObservable$ = cold('-a--b--')
 
+            // prettier-ignore
             const resultingObservable$ = startingObservable$.pipe(
                 tap(() => mockFunction1()),
                 // ↓ Your code here

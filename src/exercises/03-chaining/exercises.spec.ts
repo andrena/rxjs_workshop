@@ -121,6 +121,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Company>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -142,6 +143,7 @@ describe('chained observables', () => {
             // Hint: Remember that you can pipe on the inner observable as well!
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -163,6 +165,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Status>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -180,6 +183,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Status>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -199,6 +203,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Status>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -217,6 +222,7 @@ describe('chained observables', () => {
             // Hint: Remember that you can chain multiple observables!
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -233,6 +239,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Address>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -250,6 +257,7 @@ describe('chained observables', () => {
             // Hint: Remember that you can pipe on inner observables as well!
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -269,6 +277,7 @@ describe('chained observables', () => {
             // switchMap and change the inner value to a tuple of object that contains both (outer and inner) values.
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -287,6 +296,7 @@ describe('chained observables', () => {
             // Hint: Remember that catchError can go on the inner or on the outer observable! What is needed here?
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -306,6 +316,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Company>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -324,6 +335,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Company>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -342,6 +354,7 @@ describe('chained observables', () => {
             let chainedObservable$: Observable<Status>
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -363,6 +376,7 @@ describe('chained observables', () => {
             const updateLastLoggedInUser: (company: Company, userCode: string) => void = jest.fn()
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -396,6 +410,7 @@ describe('chained observables', () => {
             const updateUserStatusInDb: (status: Status, userCode: string) => void = jest.fn()
 
             // @ts-ignore
+            // prettier-ignore
             chainedObservable$ = getWorkingCurrentUser().pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -424,6 +439,7 @@ describe('chained observables', () => {
             const updateProfileClicks$ = hot('-x------x--x--', {x: undefined})
             const updateProfile = () => cold('----(x|)', {x: 'profile updated'})
 
+            // prettier-ignore
             chainedObservable$ = updateProfileClicks$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
@@ -453,6 +469,7 @@ describe('chained observables', () => {
             // milli seconds and then emits a 0 and completes (there are also variants with more parameters but they
             // are not relevant here).
 
+            // prettier-ignore
             displayErrorMessage$ = errors$.pipe(
                 // ↓ Your code here
                 // ↑ Your code here
