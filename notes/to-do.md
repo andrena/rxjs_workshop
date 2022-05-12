@@ -18,7 +18,7 @@
 
 ## Piping Übungen
 
-- [M] TakeUntil Testnamen anpassen 
+- [x] TakeUntil Testnamen anpassen 
 - [x] catchError bei Piping nochmal die Beschreibung überarbeiten.
 - [x] getHelloInLanguage überall erwähnen, wo benötigt
 

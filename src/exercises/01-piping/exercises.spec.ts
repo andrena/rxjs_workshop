@@ -172,7 +172,7 @@ describe('piping', () => {
             // From the current user observable only retrieve users older than 18. Then return the code of the users matching.
         })
 
-        it('takeUntil, filter, map: only take until the discount time observable emits', () => {
+        it('takeUntil: one take users in lobby as long as the lobby has not closed', () => {
             // Only emit users as long as this observable has not emitted
             const lobbyClosed$ = cold('--------(x|)')
 
