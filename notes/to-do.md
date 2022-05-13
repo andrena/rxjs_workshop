@@ -7,13 +7,13 @@
 - [M] shortcuts für stackblitz
 - [B] Pro Teil (P/C/C) eine Aufgabe raussuchen (evtl. eine mit mehr Praxisbezug), die dann am Ende des Abschnittes gemeinsam gelöst wird
 - [B] Schriftgröße bei der Präsentation groß - herausfinden
-- [F] Bild für den Anfang mit Stackblitz URL, github URL, Doku
-- [F] Am anfang aufs Repo verlinken
-- [F] Speichern zur Folie hinzufügen
+- [x] Bild für den Anfang mit Stackblitz URL, github URL, Doku
+- [x] Am anfang aufs Repo verlinken
+- [x] Speichern zur Folie hinzufügen
   - Beim Speichen overwrite Remote Changes erwähnen
-- [F] Endfolie mit Kontaktdaten für Fragen (und Dankeschön)
+- [x] Endfolie mit Kontaktdaten für Fragen (und Dankeschön)
 - [F] Marble-Strings als HTML zur Verfügung stellen, herausfinden, wie man das in Stackblitz anzeigen lässt
-- [F] Foliensatz ausbessern Datum
+- [x] Foliensatz ausbessern Datum
 
 
 ## Piping Übungen
