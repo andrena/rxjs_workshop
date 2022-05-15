@@ -15,6 +15,8 @@ RxJS Animated: https://indepth.dev/reference/rxjs
 RxJS Animated: https://indepth.dev/posts/1114/learn-to-combine-rxjs-sequences-with-super-intuitive-interactive-diagrams
 RxJS interactive Marbles: https://rxmarbles.com/
 
+Keyboard shortcuts for Stackblitz are the same as for Visual Studio Code. Attached in this repository there are Cheat Sheets for the different operating systems. 
+
 ## First steps
 
 After checking out the project, first run `npm install` or `yarn install`. This should be done automatically if you use this project in Stackblitz.
