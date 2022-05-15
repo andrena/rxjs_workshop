@@ -6,7 +6,7 @@ Materials are free to use for private education. Feel free to copy it to your ma
 
 ## This project on github
 
-Here you can find this project on github together with a solutions branch: https://github.com/RxJSWorkshop/RxJSWorkshop
+Here you can find this project on github together with a solutions branch: https://github.com/andrena/rxjs_workshop
 
 ## Helpful links
 

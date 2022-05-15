@@ -1,10 +1,10 @@
 # TODO
 
-- [M] Move Project to andrena organization in github and update links
+- [x] Move Project to andrena organization in github and update links
 - [M] Fix formatting in master branch (comments and ()) (maybe configure stackblitz)
 - [x] testWatch (watch:piping)
 - [x] Eric raus (In den Anfangsübung entfernt)
-- [M] shortcuts für stackblitz
+- [x] shortcuts für stackblitz
 - [B] Pro Teil (P/C/C) eine Aufgabe raussuchen (evtl. eine mit mehr Praxisbezug), die dann am Ende des Abschnittes gemeinsam gelöst wird
 - [B] Schriftgröße bei der Präsentation groß - herausfinden
 - [x] Bild für den Anfang mit Stackblitz URL, github URL, Doku
