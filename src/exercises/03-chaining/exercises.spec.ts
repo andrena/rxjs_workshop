@@ -2,7 +2,8 @@
 
 import { cold, hot } from 'jest-marbles'
 import {
-    catchError, combineLatest,
+    catchError,
+    combineLatest,
     concatMap,
     exhaustMap,
     filter,
@@ -459,7 +460,7 @@ describe('chained observables', () => {
             // update has finished yet.
         })
 
-        it('17 switchMap, timer, map, startWith: shows an error message for five seconds if an error occurs', () => {
+        it('17 switchMap, timer, map, startWith: shows an error message for 50 ms if an error occurs', () => {
             let displayErrorMessage$: Observable<boolean>
 
             const errors$ = hot('--x------x-x--------')
@@ -479,10 +480,6 @@ describe('chained observables', () => {
                 cold('f-t----f-t-t----f', {f: false, t: true}),
             )
 
-            // expect(errors$).toSatisfyOnFlush(() => {
-            //     expect(timer).toHaveBeenCalledWith(500)
-            //     expect(timer).toHaveBeenCalledTimes(3)
-            // })
             // We have an observable "error$" that emits each time an error happens.
             // We want to create an observable "displayErrorMessage$" that emits a boolean to determine whether an error
             // message should be displayed.

@@ -581,28 +581,35 @@ describe('piping', () => {
         })
 
         it('shareReplay: only call cold observable once, keep buffer', () => {
-            const mockFunction1 = jest.fn()
+            const functionToVerify = jest.fn()
             const mockFunction2 = jest.fn()
-            const startingObservable$ = cold('-a--b--')
+            const mockFunction3 = jest.fn()
+
+            // Assume this functions makes an http call to fetch more user info
+            // functionToVerify is only there to see how often the http call
+            // is executed. Each time it is executed, functionToVerify is called.
+            const getUserInfo = (userCode: string) => {
+                return cold('---(a|)').pipe(tap(functionToVerify))
+            }
 
             // prettier-ignore
-            const resultingObservable$ = startingObservable$.pipe(
-                tap(() => mockFunction1()),
+            const userInfo$ = getUserInfo('someUserCode').pipe(
                 // ↓ Your code here
                 // ↑ Your code here
             )
 
-            resultingObservable$.subscribe(() => mockFunction2())
-            resultingObservable$.subscribe(() => mockFunction2())
+            userInfo$.subscribe(() => mockFunction2())
+            userInfo$.subscribe(() => mockFunction3())
 
-            expect(startingObservable$).toSatisfyOnFlush(() => {
-                expect(mockFunction1).toHaveBeenCalledTimes(2)
-                expect(mockFunction2).toHaveBeenCalledTimes(4)
+            expect(userInfo$).toSatisfyOnFlush(() => {
+                expect(functionToVerify).toHaveBeenCalledTimes(1)
+                expect(mockFunction2).toHaveBeenCalledTimes(1)
+                expect(mockFunction3).toHaveBeenCalledTimes(1)
             })
 
-            // We want to subscribe to the resultingObservable$ multiple times to receive the emitted values on multiple places.
-            // However, we do not want the calculations for this observable (in this case the "tap") to be executed each
-            // time we subscribe but we want to buffer the result instead and share it across the subscribers.
+            // We have an observable that is the result of an http request. We want to subscribe multiple times to
+            // this observable. However, we don't want the http request to be executed each time we subscribe to it.
+            // It should only be executed once and the result should then be shared across all (including late) subscribers.
         })
     })
 })
