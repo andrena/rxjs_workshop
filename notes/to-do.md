@@ -1,7 +1,7 @@
 # TODO
 
 - [x] Move Project to andrena organization in github and update links
-- [M] Fix formatting in master branch (comments and ()) (maybe configure stackblitz)
+- [x] Fix formatting in master branch (comments and ()) (maybe configure stackblitz)
 - [x] testWatch (watch:piping)
 - [x] Eric raus (In den Anfangsübung entfernt)
 - [x] shortcuts für stackblitz
