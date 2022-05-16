@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+  
+    <h2>joiningUser$</h2>
+    <p>-a---bh----d-g---fc--e</p>
+    
     <h2>getCurrentUsers()</h2>
     <p>0--a----b--dc--e--ab---h</p>
 
