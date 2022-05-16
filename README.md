@@ -21,6 +21,9 @@ Keyboard shortcuts for Stackblitz are the same as for Visual Studio Code. Attach
 
 After checking out the project, first run `npm install` or `yarn install`. This should be done automatically if you use this project in Stackblitz.
 
+Afterwards run `yarn server` or `npm run serve` and open another terminal by clicking on the plus symbol on the top right of the active terminal.
+In this terminal you can run your tests.
+
 ## Exercises
 
 The exercises can be found at `src/exercises`. There will not be enough time during the workshop to complete all exercises per section. So just pick the ones you would like to work on first.
