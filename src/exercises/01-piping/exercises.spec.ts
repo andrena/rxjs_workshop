@@ -221,7 +221,7 @@ describe('piping', () => {
                 usersWithError$ = hot('--a---b-c-#--eg', {a: albert, b: berta, c: charlotte, e: eric, g: gregor})
             })
 
-            it('catchError, map: return the user guest when an error occurs and return the codes of the users in the observable ', () => {
+            it('catchError, map, of: return the user guest when an error occurs and return the codes of the users in the observable ', () => {
                 // @ts-ignore
                 // prettier-ignore
                 const user$: Observable<string> = usersWithError$.pipe(
@@ -244,8 +244,13 @@ describe('piping', () => {
 
                 let expectedObservable$: ObservableWithSubscriptions
 
+                // @ts-ignore
+                // prettier-ignore
+                expectedObservable$ = cold(
                 // ↓ Your code here
+                    ''
                 // ↑ Your code here
+                )
 
                 expect(user$).toBeObservable(
                     expectedObservable$,
@@ -449,7 +454,7 @@ describe('piping', () => {
             // to determine the right neighbor.
         })
 
-        it('delay, map: how delayed welcome message after a user logged in', () => {
+        it('delay, map: delayed welcome message after a user logged in', () => {
             let userWelcomePopupText$: Observable<string>
 
             // @ts-ignore
